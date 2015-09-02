@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.fyshadows.beware" >
+
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:theme="@style/AppTheme" >
+        <activity
+            android:name=".LoginActivity"
+            android:label="@string/title_activity_login" >
+        </activity>
+        <activity
+            android:name=".SplashScreen"
+            android:label="@string/title_activity_splash_screen" >
+        </activity>
+        <activity
+            android:name=".WritePost"
+            android:label="@string/title_activity_write_post" >
+        </activity>
+        <activity
+            android:name=".Home"
+            android:label="@string/title_activity_home" >
+        </activity>
+    </application>
+
+</manifest>

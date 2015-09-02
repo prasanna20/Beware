@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">Beware</string>
+    <string name="title_activity_login">Login</string>
+
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+    <string name="title_activity_splash_screen">Beware</string>
+    <string name="title_activity_write_post">WritePost</string>
+    <string name="title_activity_home">Home</string>
+</resources>
