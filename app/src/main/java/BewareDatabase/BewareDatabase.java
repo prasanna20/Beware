@@ -6,11 +6,22 @@ import android.content.ContextWrapper;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.os.StrictMode;
+import android.util.Log;
+
+import com.fyshadows.beware.JSONParser;
+
+import org.apache.http.NameValuePair;
+import org.apache.http.message.BasicNameValuePair;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.File;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
 
+import BewareData.MasterDetails;
 import BewareData.Post;
 import BewareData.UserDetails;
 
@@ -20,6 +31,8 @@ import BewareData.UserDetails;
 
 
 public class BewareDatabase extends SQLiteOpenHelper {
+
+    JSONParser jsonParser = new JSONParser();
 
 
     public BewareDatabase(Context context) {
@@ -49,22 +62,56 @@ public class BewareDatabase extends SQLiteOpenHelper {
 
 
     /*Start :- bw_UserDetails */
-    public void InsertUserDetails(String UserId, String UserName, String EmailId, String Location, String GcmId) {
-        SQLiteDatabase db = this.getWritableDatabase();
-        ContentValues values = new ContentValues();
+    public Boolean InsertUserDetails(UserDetails UserDetails) {
+        try {
+            SQLiteDatabase db = this.getWritableDatabase();
+            ContentValues values = new ContentValues();
 
-        values.put("UserId", UserId);
-        values.put("UserName", UserName);
-        values.put("EmailId", EmailId);
-        values.put("Location", Location);
-        values.put("GcmId", GcmId);
+            values.put("UserId", UserDetails.getUserId());
+            values.put("UserName", UserDetails.getUserName());
+            values.put("EmailId", UserDetails.getEmailId());
+            values.put("Location", UserDetails.getLocation());
+            values.put("GcmId", UserDetails.getGcmId());
 
-        db.insert("bw_UserDetails", null, values);
+            Log.i("DBINSERT", UserDetails.getUserId());
+            Log.i("DBINSERT", UserDetails.getUserName());
+            Log.i("DBINSERT", UserDetails.getEmailId());
+            Log.i("DBINSERT", UserDetails.getLocation());
+            Log.i("DBINSERT", UserDetails.getGcmId());
 
-        if (db.isOpen()) {
-            db.close();
+            db.insert("bw_UserDetails", null, values);
+
+            if (db.isOpen()) {
+                db.close();
+            }
+
+            //Store it in server
+            List<NameValuePair> params = new ArrayList<NameValuePair>();
+
+            params.add(new BasicNameValuePair("UserId", UserDetails.getUserId()));
+            params.add(new BasicNameValuePair("UserName", UserDetails.getUserName()));
+            params.add(new BasicNameValuePair("EmailId", UserDetails.getEmailId()));
+            params.add(new BasicNameValuePair("Location", UserDetails.getLocation()));
+            params.add(new BasicNameValuePair("GcmId", UserDetails.getGcmId()));
+            JSONObject json = jsonParser.makeHttpRequest(
+                    MasterDetails.registeruser, "GET", params);
+
+
+            int success = json.getInt("success");
+
+            if (success == 1) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+           catch (JSONException e) {
+               Log.i("BewareDatabase","Insert Failed");
+               return false;
         }
     }
+
+
 
     public ArrayList<UserDetails> getUserDetails(String ExamDate) {
         SQLiteDatabase db = this.getWritableDatabase();
