@@ -16,18 +16,12 @@ public class SplashScreen extends AppCompatActivity {
         setContentView(R.layout.activity_splash_screen);
         SplashScreenTimer = new Thread() {
             public void run() {
-                try {
-                    int logoTimer = 0;
-                    while (logoTimer < 20000) {
-                        sleep(100);
-                        logoTimer = logoTimer + 300;
+                int logoTimer = 0;
+                while (logoTimer < 20000) {
+                    logoTimer = logoTimer + 300;
 
-                    };
-                    HomeActivity();
-                } catch (InterruptedException e) {
-
-                    e.printStackTrace();
-                }
+                };
+                HomeActivity();
             }
         };
 

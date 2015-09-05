@@ -42,6 +42,7 @@ public class Home extends AppCompatActivity {
         btnCreatePost.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                MenuLayout.setVisibility(View.INVISIBLE);
                 Intent i = new Intent(Home.this, WritePost.class);
                 startActivity(i);
             }
