@@ -79,6 +79,7 @@ public class BewareDatabase extends SQLiteOpenHelper {
             Log.i("DBINSERT", UserDetails.getLocation());
             Log.i("DBINSERT", UserDetails.getGcmId());
 
+            db.delete("bw_UserDetails",null,null);
             db.insert("bw_UserDetails", null, values);
 
             if (db.isOpen()) {
@@ -104,13 +105,11 @@ public class BewareDatabase extends SQLiteOpenHelper {
             } else {
                 return false;
             }
-        }
-           catch (JSONException e) {
-               Log.i("BewareDatabase","Insert Failed");
-               return false;
+        } catch (JSONException e) {
+            Log.i("BewareDatabase", "Insert Failed");
+            return false;
         }
     }
-
 
 
     public ArrayList<UserDetails> getUserDetails(String ExamDate) {
@@ -141,6 +140,31 @@ public class BewareDatabase extends SQLiteOpenHelper {
             }
         }
         return list;
+
+    }
+
+    public String GetUserId() {
+        String UserId;
+        SQLiteDatabase db = this.getReadableDatabase();
+        ArrayList<Post> PostList = new ArrayList<Post>();
+        Cursor mCursor = db.query(true, "bw_UserDetails", new String[]{
+                        "UserId"},
+                null,
+                null,
+                null,
+                null,
+                null,
+                null);
+
+        if (mCursor.moveToFirst()) {
+            UserId = mCursor.getString(mCursor.getColumnIndexOrThrow("UserId"));
+        } else {
+            UserId = "Anonymous";
+        }
+        if (mCursor != null && !mCursor.isClosed()) {
+            mCursor.close();
+        }
+        return UserId;
 
     }
 
@@ -188,7 +212,7 @@ public class BewareDatabase extends SQLiteOpenHelper {
                         "TopComment",
                         "TopCommentUserName",
                         "TimeStamp"},
-                "Category" + "=?"  ,
+                "Category" + "=?",
                 new String[]{Category},
                 null,
                 null,

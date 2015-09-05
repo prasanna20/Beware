@@ -3,12 +3,14 @@ package com.fyshadows.beware;
 import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.StrictMode;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -55,6 +57,7 @@ public class LoginActivity extends AppCompatActivity {
     GoogleCloudMessaging gcm;
     String regId;
     BewareDatabase db;
+    SharedPreferences prefs;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,6 +68,16 @@ public class LoginActivity extends AppCompatActivity {
             StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder()
                     .permitAll().build();
             StrictMode.setThreadPolicy(policy);
+        }
+
+        prefs = PreferenceManager.getDefaultSharedPreferences(this);
+
+        //Check for first time activity
+        if (prefs.getBoolean("Firsttimeactivity", false)) {
+            {
+                // This block is used for the already installed activity
+                SplashScreenActivity();
+            }
         }
 
         //GET EditText value
@@ -128,9 +141,16 @@ public class LoginActivity extends AppCompatActivity {
                     if (db.InsertUserDetails(UserDetails)) {
                         Log.i("LoginActivity", "Registered Successfully");
                         Toast.makeText(LoginActivity.this, "Registered Successfully", Toast.LENGTH_LONG).show();
+                        SharedPreferences.Editor editor = prefs.edit();
+                        editor.putBoolean("Firsttimeactivity", true);
+                        editor.commit();
+                        SplashScreenActivity();
                     } else {
                         Log.i("LoginActivity", "Not Registered Successfully");
                         Toast.makeText(LoginActivity.this, "Registration Unsuccesfull,Please Try Again.", Toast.LENGTH_LONG).show();
+                        SharedPreferences.Editor editor = prefs.edit();
+                        editor.putBoolean("Firsttimeactivity", false);
+                        editor.commit();
                     }
                 } else {
                     Toast.makeText(LoginActivity.this, "Please connect to internet", Toast.LENGTH_LONG).show();
@@ -224,6 +244,7 @@ public class LoginActivity extends AppCompatActivity {
                 }
                 catch (IOException ex) {
                     String msg = "Error :" + ex.getMessage();
+                    Log.i("LoginActivity",msg);
 
                 }
 
@@ -291,9 +312,17 @@ public class LoginActivity extends AppCompatActivity {
         @Override
         protected String doInBackground(String... urls) {
 
-            Log.i("Exam", "into async task");
+            Log.i("LoginActivity", "into async task");
             GcmRegistration();
             return null;
         }
+    }
+
+    public void SplashScreenActivity()
+    {
+        Intent i = new Intent(LoginActivity.this, SplashScreen.class);
+        i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK
+                | Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(i);
     }
 }

@@ -13,6 +13,8 @@ public class MasterDetails {
 
    public static String sender_id="830753459977";
     public static String registeruser ="http://collegemateapp.com/Beware/StoreUserDetails.php";
+    public static String CreatePost ="http://collegemateapp.com/Beware/CreatePost.php";
+    public static String GetPolls= "http://collegemateapp.com/Beware/GetPost.php";
 
     public ArrayList<String> GetCityDetails()
     {
@@ -24,6 +26,20 @@ public class MasterDetails {
         City.add(4,"Guindy" );
         return  City;
     }
+
+    public  ArrayList<String> GetPostCategory()
+    {
+        ArrayList<String> Category = new ArrayList<String>();
+        Category.add(0,"Places" );
+        Category.add(1,"Hotels" );
+        Category.add(2,"Health" );
+        Category.add(3,"Girls Safety");
+        Category.add(4,"Company");
+        Category.add(2,"People" );
+        Category.add(5,"Others");
+        return  Category;
+    }
+
 
     public static boolean isOnline(Context context) {
         ConnectivityManager cm = (ConnectivityManager) context
