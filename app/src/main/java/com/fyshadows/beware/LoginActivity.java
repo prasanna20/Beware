@@ -93,6 +93,29 @@ public class LoginActivity extends AppCompatActivity {
         btnRegistration.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                //Validation
+                if(editText_name.getText().toString().trim().equals("")  )
+                {
+                    editText_name.requestFocus();
+                    Toast.makeText(LoginActivity.this, "Please Enter Name", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                if(editText_email.getText().toString().trim().equals("")  )
+                {
+                    editText_email.requestFocus();
+                    Toast.makeText(LoginActivity.this, "Please Enter Email Address", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                if(spinnerCity.getSelectedItem().toString().equals("--Select City--")  )
+                {
+                    spinnerCity.requestFocus();
+                    Toast.makeText(LoginActivity.this, "Please Select City", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
                 UserDetails UserDetails = new UserDetails();
                 UserDetails.setUserName(editText_name.getText().toString());
                 UserDetails.setEmailId(editText_email.getText().toString());
@@ -104,13 +127,13 @@ public class LoginActivity extends AppCompatActivity {
 
                     if (db.InsertUserDetails(UserDetails)) {
                         Log.i("LoginActivity", "Registered Successfully");
-                        Toast.makeText(LoginActivity.this, "Registered Successfully", Toast.LENGTH_LONG);
+                        Toast.makeText(LoginActivity.this, "Registered Successfully", Toast.LENGTH_LONG).show();
                     } else {
                         Log.i("LoginActivity", "Not Registered Successfully");
-                        Toast.makeText(LoginActivity.this, "Registration Unsuccesfull,Please Try Again.", Toast.LENGTH_LONG);
+                        Toast.makeText(LoginActivity.this, "Registration Unsuccesfull,Please Try Again.", Toast.LENGTH_LONG).show();
                     }
                 } else {
-                    Toast.makeText(LoginActivity.this, "Please connect to internet", Toast.LENGTH_LONG);
+                    Toast.makeText(LoginActivity.this, "Please connect to internet", Toast.LENGTH_LONG).show();
                 }
             }
         });
@@ -205,8 +228,6 @@ public class LoginActivity extends AppCompatActivity {
                 }
 
             }
-        } else {
-            //Log.i(TAG, "No valid Google Play Services APK found.");
         }
     }
 
