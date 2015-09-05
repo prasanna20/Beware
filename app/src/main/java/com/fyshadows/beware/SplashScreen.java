@@ -18,6 +18,11 @@ public class SplashScreen extends AppCompatActivity {
             public void run() {
                 int logoTimer = 0;
                 while (logoTimer < 20000) {
+                    try {
+                        sleep(100);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
                     logoTimer = logoTimer + 300;
 
                 };
