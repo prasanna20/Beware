@@ -1,57 +1,92 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
-    android:layout_height="match_parent" android:paddingLeft="@dimen/activity_horizontal_margin"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/appbg"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    android:paddingBottom="@dimen/activity_vertical_margin"
     tools:context="com.fyshadows.beware.LoginActivity">
 
-    <EditText
-        android:id="@+id/editText_name"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_marginTop="10dp"
-        android:background="#ffffff"
-        android:digits="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789 "
-        android:hint="Enter your name"
-        android:padding="10dp" >
-        <requestFocus android:layout_width="match_parent" />
-    </EditText>
+        android:layout_height="wrap_content">
 
-    <EditText
-        android:id="@+id/editText_email"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:layout_below="@+id/editText_name"
-        android:background="#ffffff"
-        android:digits="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789 "
-        android:hint="Enter your email"
-        android:padding="10dp" >
-    </EditText>
+        <ImageView
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_marginTop="5dp"
+            android:layout_alignTop="@+id/editText_name"
+            android:src="@drawable/ic_mail"/>
 
-    <Spinner
-        android:id="@+id/spinCity"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/editText_email"
-        android:layout_marginTop="15dp" />
+        <EditText
+            android:id="@+id/editText_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="32dp"
+            android:textColorHint="@color/white"
+            android:textColor="@color/white"
+            android:digits="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789 "
+            android:hint="Enter your name"
+            android:padding="10dp">
+
+            <requestFocus android:layout_width="match_parent" />
+        </EditText>
+
+        <ImageView
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_marginTop="8dp"
+            android:layout_alignTop="@+id/editText_email"
+            android:src="@drawable/ic_name"/>
+
+        <EditText
+            android:id="@+id/editText_email"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/editText_name"
+            android:layout_marginLeft="32dp"
+            android:textColorHint="@color/white"
+            android:textColor="@color/white"
+            android:layout_marginTop="30dp"
+            android:digits="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789 "
+            android:hint="Enter your email"
+            android:padding="10dp"></EditText>
+
+        <ImageView
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_marginTop="5dp"
+            android:layout_alignTop="@+id/spinCity"
+            android:src="@drawable/ic_locpin"/>
+
+        <Spinner
+            android:id="@+id/spinCity"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/editText_email"
+            android:layout_marginTop="30dp"
+            android:layout_marginLeft="35dp"
+            android:background="@drawable/spinnerbg"
+            android:padding="10dp"/>
+
+
+    </RelativeLayout>
 
     <Button
         android:id="@+id/btnRegistration"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="40dp"
+        android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
-        android:layout_below="@+id/spinCity"
-        android:layout_marginTop="20dp"
-        android:paddingLeft="10dp"
-        android:paddingRight="10dp"
+        android:layout_marginTop="30dp"
+        android:background="@drawable/buttonbg"
+        android:padding="10dp"
         android:text="@string/Register"
-        android:textColor="#ffffff" />
-
-
-
-
+        android:textStyle="bold"
+        android:textColor="@color/white" />
 
 </RelativeLayout>
