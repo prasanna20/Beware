@@ -70,6 +70,25 @@
             android:textColor="@color/timestamp"
             android:textSize="@dimen/feed_item_timestamp" />
 
+        <TextView
+            android:id="@+id/txtHelpFull"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/txtCommentBy"
+            android:text="HelpFull"
+            android:textColor="@color/timestamp"
+            android:textSize="@dimen/feed_item_timestamp" />
+
+
+        <TextView
+            android:id="@+id/txtNotHelpFull"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/txtHelpFull"
+            android:text="NotHelpFull"
+            android:textColor="@color/timestamp"
+            android:textSize="@dimen/feed_item_timestamp" />
+
 
     </RelativeLayout>
 

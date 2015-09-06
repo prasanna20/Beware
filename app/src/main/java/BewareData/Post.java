@@ -62,7 +62,7 @@ public class Post {
 
     public String getTopCommentUserName() {return TopCommentUserName;}
 
-    public void setTopCommentUserName(String TopCommentUserName) {this.Subject = TopCommentUserName;}
+    public void setTopCommentUserName(String TopCommentUserName) {this.TopCommentUserName = TopCommentUserName;}
 
     public String getTimeStamp() {return TimeStamp;}
 

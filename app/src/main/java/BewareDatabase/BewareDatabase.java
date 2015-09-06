@@ -79,7 +79,7 @@ public class BewareDatabase extends SQLiteOpenHelper {
             Log.i("DBINSERT", UserDetails.getLocation());
             Log.i("DBINSERT", UserDetails.getGcmId());
 
-            db.delete("bw_UserDetails",null,null);
+            db.delete("bw_UserDetails", null, null);
             db.insert("bw_UserDetails", null, values);
 
             if (db.isOpen()) {
@@ -112,11 +112,11 @@ public class BewareDatabase extends SQLiteOpenHelper {
     }
 
 
-    public ArrayList<UserDetails> getUserDetails(String ExamDate) {
+    public ArrayList<UserDetails> getUserDetails() {
         SQLiteDatabase db = this.getWritableDatabase();
         ArrayList<UserDetails> list = new ArrayList<UserDetails>();
 
-        String selectQuery = "select Top 1 UserId ,UserName ,EmailId ,Location ,GcmId from bw_UserDetails";
+        String selectQuery = "select UserId ,UserName ,EmailId ,Location ,GcmId from bw_UserDetails ";
 
         Cursor cursor = db.rawQuery(selectQuery, null);
 
@@ -193,6 +193,39 @@ public class BewareDatabase extends SQLiteOpenHelper {
         }
     }
 
+    public void InsertPost(Post post) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+
+        Log.i("InsertPost", String.valueOf(post.getPostId()));
+        Log.i("InsertPost", String.valueOf(post.getHelpFull()));
+        Log.i("InsertPost", String.valueOf(post.getNotHelpFull()));
+        Log.i("InsertPost", String.valueOf(post.getUserName()));
+        Log.i("InsertPost", String.valueOf(post.getCategory()));
+        Log.i("InsertPost", String.valueOf(post.getSubject()));
+        Log.i("InsertPost", String.valueOf(post.getPostText()));
+        Log.i("InsertPost", String.valueOf(post.getTopComment()));
+        Log.i("InsertPost", String.valueOf(post.getTopCommentUserName()));
+        Log.i("InsertPost", String.valueOf(post.getTimeStamp()));
+
+        values.put("PostId", post.getPostId());
+        values.put("HelpFull", post.getHelpFull());
+        values.put("NotHelpFull", post.getNotHelpFull());
+        values.put("UserName", post.getUserName());
+        values.put("Category", post.getCategory());
+        values.put("Subject", post.getSubject());
+        values.put("PostText", post.getPostText());
+        values.put("TopComment", post.getTopComment());
+        values.put("TopCommentUserName", post.getTopCommentUserName());
+        values.put("TimeStamp", post.getTimeStamp());
+
+        db.insert("bw_Post", null, values);
+
+        if (db.isOpen()) {
+            db.close();
+        }
+    }
+
     /*Reference
     * public Cursor query (boolean distinct, String table, String[] columns, String selection, String[] selectionArgs,
     * String groupBy, String having, String orderBy, String limit)*/
@@ -201,23 +234,16 @@ public class BewareDatabase extends SQLiteOpenHelper {
 
         SQLiteDatabase db = this.getReadableDatabase();
         ArrayList<Post> PostList = new ArrayList<Post>();
-        Cursor mCursor = db.query(true, "bw_Post", new String[]{
-                        "PostId",
-                        "HelpFull",
-                        "NotHelpFull",
-                        "UserName",
-                        "Category",
-                        "Subject",
-                        "PostText",
-                        "TopComment",
-                        "TopCommentUserName",
-                        "TimeStamp"},
-                "Category" + "=?",
-                new String[]{Category},
-                null,
-                null,
-                "TimeStamp DESC",
-                null);
+        String selectQuery;
+
+
+        if (Category == "No") {
+            selectQuery = "SELECT  PostId,HelpFull,NotHelpFull,UserName,Category,Subject,PostText,TopComment,TopCommentUserName,TimeStamp from bw_Post";
+        } else {
+            selectQuery = "SELECT  PostId,HelpFull,NotHelpFull,UserName,Category,Subject,PostText,TopComment,TopCommentUserName,TimeStamp from bw_Post where Category='" + Category + "'";
+        }
+
+        Cursor mCursor = db.rawQuery(selectQuery, null);
 
 
         if (mCursor.moveToFirst()) {
@@ -234,6 +260,8 @@ public class BewareDatabase extends SQLiteOpenHelper {
                 objPost.setTopCommentUserName(mCursor.getString(mCursor.getColumnIndexOrThrow("TopCommentUserName")));
                 objPost.setTimeStamp(mCursor.getString(mCursor.getColumnIndexOrThrow("TimeStamp")));
 
+                Log.i("BewareDatabase", mCursor.getString(mCursor.getColumnIndexOrThrow("Subject")));
+
                 PostList.add(objPost);
             } while (mCursor.moveToNext());
         }
@@ -241,6 +269,33 @@ public class BewareDatabase extends SQLiteOpenHelper {
             mCursor.close();
         }
         return PostList;
+
+    }
+
+    public int getMaxPostId() throws SQLException {
+
+        int PostId = 0;
+
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        ArrayList<Post> PostList = new ArrayList<Post>();
+
+        String selectQuery;
+
+        selectQuery = "SELECT  max(PostId) PostId from bw_Post";
+
+        Cursor mCursor = db.rawQuery(selectQuery, null);
+
+        if (mCursor.moveToFirst()) {
+
+            PostId = mCursor.getInt(mCursor.getColumnIndexOrThrow("PostId"));
+        }
+
+        if (mCursor != null && !mCursor.isClosed()) {
+            mCursor.close();
+        }
+
+        return PostId;
 
     }
 
