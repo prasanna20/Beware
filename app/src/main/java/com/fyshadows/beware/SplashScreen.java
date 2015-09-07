@@ -9,6 +9,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.Toast;
 
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
@@ -56,7 +57,13 @@ public class SplashScreen extends AppCompatActivity {
         };
 
         //Get Post
-        new asyncGetLatestPost().execute();
+        if(MasterDetails.isOnline(this)) {
+            new asyncGetLatestPost().execute();
+        }
+        else
+        {
+            Toast.makeText(this,"Please connect to internet. You Are on offline mode",Toast.LENGTH_LONG).show();
+        }
 
         SplashScreenTimer.start();
 

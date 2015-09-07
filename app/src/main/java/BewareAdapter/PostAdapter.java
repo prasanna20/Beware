@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
+import com.fyshadows.beware.CommentActivity;
 import com.fyshadows.beware.R;
 
 import java.util.List;
@@ -106,7 +107,7 @@ public class PostAdapter extends ArrayAdapter<Post> {
             {
                 holder.txtSubject.setText("");
             }
-
+            Log.i("postAdapter",list.get(position).getTopComment().toString());
             if(list.get(position).getTopComment() != null) {
                 holder.txtComment.setText(list.get(position).getTopComment().toString());
             }
@@ -115,7 +116,7 @@ public class PostAdapter extends ArrayAdapter<Post> {
                 holder.txtComment.setText("");
             }
 
-
+            Log.i("postAdapter",list.get(position).getTopCommentUserName().toString());
             if(list.get(position).getTopCommentUserName() != null) {
                 holder.txtCommentBy.setText(list.get(position).getTopCommentUserName().toString());
             }
@@ -128,6 +129,17 @@ public class PostAdapter extends ArrayAdapter<Post> {
           holder.txtNotHelpFull.setText(String.valueOf(list.get(position).getNotHelpFull()));
         }
 
+        holder.txtComment.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(getContext(), CommentActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putInt("PostId", list.get(position).getPostId());
+                i.putExtras(bundle);
+                context.startActivity(i);
+            }
+
+        });
         return view;
  }
 

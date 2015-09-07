@@ -15,6 +15,8 @@ public class MasterDetails {
     public static String registeruser ="http://collegemateapp.com/Beware/StoreUserDetails.php";
     public static String CreatePost ="http://collegemateapp.com/Beware/CreatePost.php";
     public static String GetPolls= "http://collegemateapp.com/Beware/GetPost.php";
+    public static String GetComments= "http://collegemateapp.com/Beware/GetComments.php";
+    public static String PostComments= "http://collegemateapp.com/Beware/PostComment.php";
 
     public ArrayList<String> GetCityDetails()
     {

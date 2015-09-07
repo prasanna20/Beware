@@ -51,7 +51,7 @@ public class BewareDatabase extends SQLiteOpenHelper {
 
         myDB.execSQL("CREATE TABLE if not exists bw_UserDetails(UserId varchar(50),UserName varchar(250),EmailId varchar(250),Location varchar(50),GcmId Text,TimeStamp  REAL DEFAULT (datetime('now','localtime'))  );");
 
-        myDB.execSQL("CREATE TABLE if not exists bw_Post(PostId int,UserName varchar(250),Category varchar(250),Subject varchar(250),PostText Text,HelpFull Int ,NotHelpFull int,TopComment varchar(50),TopCommentUserName varchar(250),TimeStamp  REAL DEFAULT (datetime('now','localtime')) );");
+        myDB.execSQL("CREATE TABLE if not exists bw_Post(PostId int,UserName varchar(250),Category varchar(250),Subject varchar(250),PostText Text,HelpFull Int ,NotHelpFull int,TopComment varchar(250),TopCommentUserName varchar(250),TimeStamp  REAL DEFAULT (datetime('now','localtime')) );");
 
     }
 
@@ -259,6 +259,8 @@ public class BewareDatabase extends SQLiteOpenHelper {
                 objPost.setTopComment(mCursor.getString(mCursor.getColumnIndexOrThrow("TopComment")));
                 objPost.setTopCommentUserName(mCursor.getString(mCursor.getColumnIndexOrThrow("TopCommentUserName")));
                 objPost.setTimeStamp(mCursor.getString(mCursor.getColumnIndexOrThrow("TimeStamp")));
+
+                Log.i("BewareDatabaseTop", mCursor.getString(mCursor.getColumnIndexOrThrow("TopComment")));
 
                 Log.i("BewareDatabase", mCursor.getString(mCursor.getColumnIndexOrThrow("Subject")));
 

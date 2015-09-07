@@ -18,5 +18,6 @@
     <string name="Create">Create Post</string>
     <string name="title_activity_create_post">Create Post</string>
     <string name="Write">Create Post</string>
+    <string name="title_activity_comment">CommentActivity</string>
 
 </resources>

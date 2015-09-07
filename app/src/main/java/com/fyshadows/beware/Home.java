@@ -13,10 +13,10 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.google.android.gms.appdatasearch.GetRecentContextCall;
 
-import org.json.JSONObject;
 
 import java.lang.reflect.Method;
 import java.sql.SQLException;
@@ -39,6 +39,7 @@ public class Home extends AppCompatActivity {
     List<Post> list ;
     BewareDatabase db;
     PostAdapter adapter;
+    TextView txtComment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,6 +60,7 @@ public class Home extends AppCompatActivity {
 
         PostArray=new  ArrayList<Post>();
         list = new ArrayList<Post>();
+        txtComment=(TextView)  findViewById(R.id.txtComment);
         listView = (ListView) findViewById(R.id.list);
 
         try {
@@ -71,7 +73,7 @@ public class Home extends AppCompatActivity {
             e.printStackTrace();
         }
 
-        listView = (ListView) findViewById(R.id.list);
+
 
         MenuLayout = (RelativeLayout) findViewById(R.id.top_layout);
         MenuLayout.setVisibility(View.INVISIBLE);
@@ -100,6 +102,8 @@ public class Home extends AppCompatActivity {
                 startActivity(i);
             }
         });
+
+
 
     }
 
