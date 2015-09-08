@@ -51,7 +51,7 @@ public class BewareDatabase extends SQLiteOpenHelper {
 
         myDB.execSQL("CREATE TABLE if not exists bw_UserDetails(UserId varchar(50),UserName varchar(250),EmailId varchar(250),Location varchar(50),GcmId Text,TimeStamp  REAL DEFAULT (datetime('now','localtime'))  );");
 
-        myDB.execSQL("CREATE TABLE if not exists bw_Post(PostId int,UserName varchar(250),Category varchar(250),Subject varchar(250),PostText Text,HelpFull Int ,NotHelpFull int,TopComment varchar(250),TopCommentUserName varchar(250),TimeStamp  REAL DEFAULT (datetime('now','localtime')) );");
+        myDB.execSQL("CREATE TABLE if not exists bw_Post(PostId int,UserId  varchar(50),UserName varchar(250),Category varchar(250),Subject varchar(250),PostText Text,HelpFull Int ,NotHelpFull int,TopComment varchar(250),TopCommentUserName varchar(250),TimeStamp  REAL DEFAULT (datetime('now','localtime')) );");
 
     }
 
@@ -209,6 +209,7 @@ public class BewareDatabase extends SQLiteOpenHelper {
         Log.i("InsertPost", String.valueOf(post.getTimeStamp()));
 
         values.put("PostId", post.getPostId());
+        values.put("UserId", post.getUserId());
         values.put("HelpFull", post.getHelpFull());
         values.put("NotHelpFull", post.getNotHelpFull());
         values.put("UserName", post.getUserName());
@@ -237,12 +238,17 @@ public class BewareDatabase extends SQLiteOpenHelper {
         String selectQuery;
 
 
-        if (Category == "No") {
-            selectQuery = "SELECT  PostId,HelpFull,NotHelpFull,UserName,Category,Subject,PostText,TopComment,TopCommentUserName,TimeStamp from bw_Post";
-        } else {
-            selectQuery = "SELECT  PostId,HelpFull,NotHelpFull,UserName,Category,Subject,PostText,TopComment,TopCommentUserName,TimeStamp from bw_Post where Category='" + Category + "'";
+        if (Category.equalsIgnoreCase("No")) {
+            selectQuery = "SELECT  PostId,UserId,HelpFull,NotHelpFull,UserName,Category,Subject,PostText,TopComment,TopCommentUserName,TimeStamp from bw_Post  Order By TimeStamp desc";
+
+        } else if (Category.equalsIgnoreCase("MyPost")) {
+            selectQuery = "SELECT  PostId,UserId,HelpFull,NotHelpFull,UserName,Category,Subject,PostText,TopComment,TopCommentUserName,TimeStamp from bw_Post where UserId ='"+ GetUserId() +"'  Order By TimeStamp desc";
+        }  else
+        {
+            selectQuery = "SELECT  PostId,UserId,HelpFull,NotHelpFull,UserName,Category,Subject,PostText,TopComment,TopCommentUserName,TimeStamp from bw_Post where Category='" + Category + "'";
         }
 
+        Log.i("BewareDatabase",selectQuery);
         Cursor mCursor = db.rawQuery(selectQuery, null);
 
 
@@ -250,6 +256,7 @@ public class BewareDatabase extends SQLiteOpenHelper {
             do {
                 Post objPost = new Post();
                 objPost.setPostId(mCursor.getInt(mCursor.getColumnIndexOrThrow("PostId")));
+                objPost.setUserId(mCursor.getString(mCursor.getColumnIndexOrThrow("UserId")));
                 objPost.setHelpFull(mCursor.getInt(mCursor.getColumnIndexOrThrow("HelpFull")));
                 objPost.setNotHelpFull(mCursor.getInt(mCursor.getColumnIndexOrThrow("NotHelpFull")));
                 objPost.setUserName(mCursor.getString(mCursor.getColumnIndexOrThrow("UserName")));

@@ -43,7 +43,7 @@ import BewareDatabase.BewareDatabase;
 public class CommentActivity extends AppCompatActivity {
 
     ListView listView;
-    List<Comment> list;
+    ArrayList<Comment> list;
     final Handler handler = new Handler();
     JSONParser jsonParser;
 
@@ -58,6 +58,7 @@ public class CommentActivity extends AppCompatActivity {
     String UserId;
     String CommentText;
     String UserName;
+
 
     ArrayList<UserDetails> objUserDetails;
 
@@ -96,16 +97,23 @@ public class CommentActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayUseLogoEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
-
+        TextView txtEmpty = (TextView) findViewById(R.id.txtEmpty);
         if (MasterDetails.isOnline(this)) {
             list = getComments();
-            Log.i("CommentsListLength", String.valueOf(list.size()));
-            adapter = new CommentsAdapter(this, list);
-            listView.setAdapter(adapter);
-        } else {
 
-            TextView txt = (TextView) findViewById(R.id.txtEmpty);
-            txt.setText("No internet Connection.Please connect to internet");
+
+            if (list != null) {
+                adapter = new CommentsAdapter(this, list);
+                listView.setAdapter(adapter);
+                txtEmpty.setVisibility(View.INVISIBLE);
+            } else {
+                txtEmpty.setVisibility(View.VISIBLE);
+                txtEmpty.setText("Be the first to comment.");
+
+            }
+        } else {
+            txtEmpty.setVisibility(View.VISIBLE);
+            txtEmpty.setText("No internet Connection.Please connect to internet");
             Toast.makeText(this, "No internet Connection.Please connect to internet..", Toast.LENGTH_LONG).show();
         }
 
@@ -209,7 +217,14 @@ public class CommentActivity extends AppCompatActivity {
                         objComment.setCommentText(CommentText);
                         objComment.setUserName(UserName);
 
-                        list.add(objComment);
+                        if (list == null) {
+                            list = new ArrayList<Comment>();
+                            list.add(objComment);
+
+                        } else {
+                            list.add(objComment);
+                        }
+
 
                     }
                     return null;
@@ -223,70 +238,78 @@ public class CommentActivity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(String result) {
-            adapter.notifyDataSetChanged();
+            if (list != null) {
+                adapter = new CommentsAdapter(CommentActivity.this  , list);
+                listView.setAdapter(adapter);
+                txtEmpty.setVisibility(View.INVISIBLE);
+            } else {
+                txtEmpty.setVisibility(View.VISIBLE);
+                txtEmpty.setText("Be the first to comment.");
+
+            }
 
         }
     }
 
-        public List<Comment> getComments() {
-            try {
-                int index = 0;
-                int top = 0;
-                int success;
-                Comment objComment = new Comment();
-                JSONObject json;
-                if (first > 0) {
+    public ArrayList<Comment> getComments() {
+        try {
+            int index = 0;
+            int top = 0;
+            int success;
+
+            JSONObject json;
+              /*  if (first > 0) {
                     index = listView.getFirstVisiblePosition();
                     View v = listView.getChildAt(0);
                     top = (v == null) ? 0 : v.getTop();
                     list.clear();
 
-                }
+                }*/
 
-                List<NameValuePair> params = new ArrayList<NameValuePair>();
-                params.add(new BasicNameValuePair("PostId", PostID));
-                Log.i("CommentActivityParam", "ParamAdded");
-                json = jsonParser.makeHttpRequest(
-                        MasterDetails.GetComments, "GET", params);
-                Log.i("CommentActivityLength", String.valueOf(json.length()));
-                if (json != null) {
-                    // json success tag
-                    success = json.getInt("success");
-                    if (success == 1) {
-                        // successfully received product details
-                        JSONArray CommentObj = json.getJSONArray("Comment"); // JSON
-                        // Array
-                        for (int i = 0; i < CommentObj.length(); i++) {
+            List<NameValuePair> params = new ArrayList<NameValuePair>();
+            params.add(new BasicNameValuePair("PostId", PostID));
+            Log.i("CommentActivityParam", "ParamAdded");
+            json = jsonParser.makeHttpRequest(
+                    MasterDetails.GetComments, "GET", params);
+            Log.i("CommentActivityLength", String.valueOf(json.length()));
+            if (json != null) {
+                // json success tag
+                success = json.getInt("success");
+                if (success == 1) {
+                    // successfully received product details
+                    JSONArray CommentObj = json.getJSONArray("Comment"); // JSON
+                    // Array
+                    for (int i = 0; i < CommentObj.length(); i++) {
 
-
-                            JSONObject obj = CommentObj.getJSONObject(i);
-                            Log.i("CommentActivityUserName", obj.getString("UserName").toString());
-                            Log.i("CommentActivityUserName", obj.getString("Comment").toString());
-                            Log.i("CommentActivityUserName", obj.getString("TimeStamp").toString());
-                            objComment.setCommentId(obj.getInt("CommentId"));
-                            objComment.setUserName(obj.getString("UserName").toString());
-                            objComment.setCommentText(obj.getString("Comment").toString());
-                            objComment.setTimeStamp(obj.getString("TimeStamp").toString());
-                            list.add(objComment);
-                        }
-
-                        if (list.size() <= 0) {
-                            txtEmpty.setVisibility(View.VISIBLE);
-                            return null;
-                        } else {
-
-                            txtEmpty.setVisibility(View.INVISIBLE);
-                            return list;
-                        }
-
-
+                        Comment objComment = new Comment();
+                        JSONObject obj = CommentObj.getJSONObject(i);
+                        Log.i("CommentActivityUserName", obj.getString("UserName").toString());
+                        Log.i("CommentActivityUserName", obj.getString("Comment").toString());
+                        Log.i("CommentActivityUserName", obj.getString("TimeStamp").toString());
+                        objComment.setCommentId(obj.getInt("CommentId"));
+                        objComment.setUserName(obj.getString("UserName").toString());
+                        objComment.setCommentText(obj.getString("Comment").toString());
+                        objComment.setTimeStamp(obj.getString("TimeStamp").toString());
+                        list.add(objComment);
                     }
-                }
-            } catch (JSONException e) {
 
-                e.printStackTrace();
+                    if (list.size() <= 0) {
+                        txtEmpty.setVisibility(View.VISIBLE);
+                        return null;
+                    } else {
+
+                        txtEmpty.setVisibility(View.INVISIBLE);
+                        return list;
+                    }
+
+
+                }
             }
-            return null;
+        } catch (JSONException e) {
+
+            e.printStackTrace();
         }
+        return null;
+    }
 
 }

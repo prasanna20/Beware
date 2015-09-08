@@ -2,6 +2,7 @@ package com.fyshadows.beware;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.AsyncTask;
 import android.support.annotation.RequiresPermission;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -18,14 +19,17 @@ import android.widget.Toast;
 
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
 import BewareData.CreatePost;
 import BewareData.MasterDetails;
+import BewareData.Post;
 import BewareData.UserDetails;
 import BewareDatabase.BewareDatabase;
 
@@ -96,6 +100,8 @@ public class WritePost extends AppCompatActivity {
                     return;
                 }
 
+
+
                 BewareDatabase db=new BewareDatabase(WritePost.this);
 
                 CreatePost CreatePost = new CreatePost();
@@ -131,6 +137,7 @@ public class WritePost extends AppCompatActivity {
                     int success = json.getInt("success");
 
                     if (success == 1) {
+                       new asyncGetLatestPost().execute();
                        Toast.makeText(WritePost.this,"Post Created",Toast.LENGTH_SHORT).show();
                         editText_PostText.setText("");
                         editText_Subject.setText("");
@@ -170,6 +177,9 @@ public class WritePost extends AppCompatActivity {
         switch (item.getItemId()) {
             case android.R.id.home:
                 Intent i = new Intent(WritePost.this, Home.class);
+                Bundle bundle = new Bundle();
+                bundle.putString("FromScreen", "No");
+                i.putExtras(bundle);
                 startActivity(i);
                 return true;
             default:
@@ -197,5 +207,88 @@ public class WritePost extends AppCompatActivity {
 
         // attaching data adapter to spinner
         spinnerCategory.setAdapter(spinnerAdapter);
+    }
+
+    //to check for updates in questions
+    public class asyncGetLatestPost extends AsyncTask<String, Void, String> {
+        JSONParser jsonParser = new JSONParser();
+
+        @Override
+        protected void onPreExecute() {
+
+        }
+
+        @Override
+        protected String doInBackground(String... urls) {
+            try {
+                MasterDetails MasterDetails = new MasterDetails();
+                BewareDatabase db = new BewareDatabase(WritePost.this);
+                Post Post = new Post();
+                ArrayList<UserDetails> objUserDetails = new ArrayList<UserDetails>();
+                objUserDetails = db.getUserDetails();
+                JSONObject json;
+                int PostId=0;
+
+                int success;
+                List<NameValuePair> params = new ArrayList<NameValuePair>();
+                PostId=db.getMaxPostId();
+
+                Log.i("SplashScreenPostID",String.valueOf(PostId));
+
+                params.clear();
+                params.add(new BasicNameValuePair("UserId", String.valueOf(objUserDetails.get(0).getUserId().toString())));
+                params.add(new BasicNameValuePair("Location", String.valueOf(objUserDetails.get(0).getLocation().toString())));
+                params.add(new BasicNameValuePair("PostId", String.valueOf(PostId)));
+
+                json = jsonParser.makeHttpRequest(MasterDetails.GetPolls, "GET", params);
+                Log.i("SplashScreen", "got json");
+                if (json.length() > 0) {
+                    // json success tag
+                    success = json.getInt("success");
+                    if (success == 1) {
+                        Log.i("SplashScreen", "Success");
+                        // successfully received product details
+                        JSONArray objPostArray = json.getJSONArray("Post"); // JSON
+                        // Array
+                        for (int i = 0; i < objPostArray.length(); i++) {
+
+                            JSONObject obj = objPostArray.getJSONObject(i);
+                            Log.i("SplashScreenSubject",obj.getString("Subject"));
+                            Post.setPostId(obj.getInt("PostId"));
+                            Post.setHelpFull(obj.getInt("HelpFull"));
+                            Post.setNotHelpFull(obj.getInt("NotHelpFull"));
+                            Post.setUserId(obj.getString("UserId"));
+                            Post.setUserName(obj.getString("UserName"));
+                            Post.setCategory(obj.getString("Category"));
+                            Post.setSubject(obj.getString("Subject"));
+                            Post.setPostText(obj.getString("PostText"));
+                            Post.setTopComment(obj.getString("TopComment"));
+                            Post.setTopCommentUserName(obj.getString("TopCommentUserName"));
+                            Post.setTimeStamp(obj.getString("TimeStamp"));
+
+                            db.InsertPost(Post);
+
+                            //End of getting question details
+                        }
+                    }
+                }
+            } catch (JSONException e) {
+                Log.i("SplashScreen", "Executing Async activity");
+            } catch (SQLException e) {
+                Log.i("SplashScreen", "Failed while retrieving from db");
+            }
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+
+            Intent i = new Intent(WritePost.this, Home.class);
+            Bundle bundle = new Bundle();
+            bundle.putString("FromScreen", "MyPost");
+            i.putExtras(bundle);
+            startActivity(i);
+        }
     }
 }

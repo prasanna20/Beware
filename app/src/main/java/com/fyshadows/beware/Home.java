@@ -6,6 +6,7 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -40,11 +41,14 @@ public class Home extends AppCompatActivity {
     BewareDatabase db;
     PostAdapter adapter;
     TextView txtComment;
+    Button btnMyPost;
+    String FromScreen="No";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
+        try {
 
         //set action bar
         getSupportActionBar().setDisplayShowTitleEnabled(false);
@@ -56,6 +60,13 @@ public class Home extends AppCompatActivity {
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.parseColor("#40E0D0")));
 
+
+
+
+            Bundle bundle = getIntent().getExtras();
+            FromScreen = String.valueOf(bundle.getString("FromScreen"));
+            Log.i("FromScreen", FromScreen);
+
         db=new BewareDatabase(this);
 
         PostArray=new  ArrayList<Post>();
@@ -63,15 +74,12 @@ public class Home extends AppCompatActivity {
         txtComment=(TextView)  findViewById(R.id.txtComment);
         listView = (ListView) findViewById(R.id.list);
 
-        try {
-            list=db.getPostOnCategory("No");
+
+            list=db.getPostOnCategory(FromScreen);
 
             adapter = new PostAdapter(this, list);
             listView.setAdapter(adapter);
             adapter.notifyDataSetChanged();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
 
 
 
@@ -103,6 +111,24 @@ public class Home extends AppCompatActivity {
             }
         });
 
+        btnMyPost= (Button) findViewById(R.id.btnMyPost);
+        btnMyPost.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                MenuLayout.setVisibility(View.INVISIBLE);
+                try {
+                    list=db.getPostOnCategory("MyPost");
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+                adapter = new PostAdapter(Home.this , list);
+                listView.setAdapter(adapter);
+                adapter.notifyDataSetChanged();
+            }
+        });
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
 
 
     }

@@ -6,16 +6,17 @@ package BewareData;
 public class Post {
 
     private int PostId,HelpFull,NotHelpFull;
-    private String UserName,Category,Subject,PostText,TopComment,TopCommentUserName,TimeStamp;
+    private String UserId,UserName,Category,Subject,PostText,TopComment,TopCommentUserName,TimeStamp;
 
 
     public Post() {
     }
 
 
-    public Post(int PostId, int HelpFull,int NotHelpFull,String UserName,String Category,String Subject,String PostText,String TopComment,String TopCommentUserName,String TimeStamp)
+    public Post(int PostId,String UserId, int HelpFull,int NotHelpFull,String UserName,String Category,String Subject,String PostText,String TopComment,String TopCommentUserName,String TimeStamp)
     {
         super();
+        this.UserId =UserId;
         this.PostId=PostId;
         this.HelpFull=HelpFull;
         this.NotHelpFull=NotHelpFull;
@@ -32,6 +33,7 @@ public class Post {
 
     public void setPostId(int PostId) {this.PostId = PostId;}
 
+
     public int getHelpFull() {return HelpFull;}
 
     public void setHelpFull(int HelpFull) {this.HelpFull = HelpFull;}
@@ -39,6 +41,10 @@ public class Post {
     public int getNotHelpFull() {return NotHelpFull;}
 
     public void setNotHelpFull(int NotHelpFull) {this.NotHelpFull = NotHelpFull;}
+
+    public String getUserId() {return UserId;}
+
+    public void setUserId(String UserId) {this.UserId = UserId;}
 
     public String getUserName() {return UserName;}
 

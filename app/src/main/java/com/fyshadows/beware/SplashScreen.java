@@ -43,7 +43,7 @@ public class SplashScreen extends AppCompatActivity {
         SplashScreenTimer = new Thread() {
             public void run() {
                 int logoTimer = 0;
-                while (logoTimer < 18000) {
+                while (logoTimer < 15000) {
                     try {
                         sleep(100);
                     } catch (InterruptedException e) {
@@ -96,6 +96,9 @@ public class SplashScreen extends AppCompatActivity {
         Intent i = new Intent(SplashScreen.this, Home.class);
         i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK
                 | Intent.FLAG_ACTIVITY_NEW_TASK);
+        Bundle bundle = new Bundle();
+        bundle.putString("FromScreen", "No");
+        i.putExtras(bundle);
         startActivity(i);
     }
 
@@ -147,6 +150,7 @@ public class SplashScreen extends AppCompatActivity {
                             Post.setPostId(obj.getInt("PostId"));
                             Post.setHelpFull(obj.getInt("HelpFull"));
                             Post.setNotHelpFull(obj.getInt("NotHelpFull"));
+                            Post.setUserId(obj.getString("UserId"));
                             Post.setUserName(obj.getString("UserName"));
                             Post.setCategory(obj.getString("Category"));
                             Post.setSubject(obj.getString("Subject"));

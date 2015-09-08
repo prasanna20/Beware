@@ -76,6 +76,10 @@ public class CommentsAdapter extends ArrayAdapter<Comment> {
         }
 
         ViewHolder holder = (ViewHolder) view.getTag();
+
+        Log.i("CommentsAdapter", list.get(position).getUserName().toString());
+        Log.i("CommentsAdapter", list.get(position).getCommentText().toString());
+        Log.i("CommentsAdapter", list.get(position).getTimeStamp().toString());
         if (!list.get(position).toString().trim().equalsIgnoreCase("")) {
             if(list.get(position).getUserName() != null) {
                 holder.txtCommentedBy.setText(list.get(position).getUserName().toString());
