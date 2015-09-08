@@ -99,18 +99,7 @@ public class CommentActivity extends AppCompatActivity {
 
         TextView txtEmpty = (TextView) findViewById(R.id.txtEmpty);
         if (MasterDetails.isOnline(this)) {
-            list = getComments();
-
-
-            if (list != null) {
-                adapter = new CommentsAdapter(this, list);
-                listView.setAdapter(adapter);
-                txtEmpty.setVisibility(View.INVISIBLE);
-            } else {
-                txtEmpty.setVisibility(View.VISIBLE);
-                txtEmpty.setText("Be the first to comment.");
-
-            }
+         new AsyncGetComments().execute();
         } else {
             txtEmpty.setVisibility(View.VISIBLE);
             txtEmpty.setText("No internet Connection.Please connect to internet");
@@ -157,6 +146,7 @@ public class CommentActivity extends AppCompatActivity {
 
                 new PostCommentTask().execute();
 
+                edittext_Comment.setText("");
 
             }
         });
@@ -187,6 +177,33 @@ public class CommentActivity extends AppCompatActivity {
         }
 
 
+    }
+
+    public class AsyncGetComments extends AsyncTask<String, Void, String> {
+
+
+        @Override
+        protected String doInBackground(String... urls) {
+            if (MasterDetails.isOnline(CommentActivity.this)) {
+
+                  list = getComments();
+                  return null;
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            if (list == null) {
+                txtEmpty.setVisibility(View.VISIBLE);
+                txtEmpty.setText("Be the first to comment.");
+            } else {
+                adapter = new CommentsAdapter(CommentActivity.this  , list);
+                listView.setAdapter(adapter);
+                txtEmpty.setVisibility(View.INVISIBLE);
+            }
+
+        }
     }
 
 
@@ -293,14 +310,9 @@ public class CommentActivity extends AppCompatActivity {
                         list.add(objComment);
                     }
 
-                    if (list.size() <= 0) {
-                        txtEmpty.setVisibility(View.VISIBLE);
-                        return null;
-                    } else {
 
-                        txtEmpty.setVisibility(View.INVISIBLE);
                         return list;
-                    }
+
 
 
                 }

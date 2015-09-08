@@ -89,6 +89,36 @@
             android:textColor="@color/timestamp"
             android:textSize="@dimen/feed_item_timestamp" />
 
+        <TextView
+            android:id="@+id/txtTimeStamp"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/txtNotHelpFull"
+            android:text="NotHelpFull"
+            android:textColor="@color/timestamp"
+            android:textSize="@dimen/feed_item_timestamp" />
+        <Button
+            android:id="@+id/btnHelpFull"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:layout_below="@+id/txtTimeStamp"
+            android:layout_marginTop="20dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:text="HelpFull"
+            android:textColor="#ffffff" />
+        <Button
+            android:id="@+id/btnNotHelpFull"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@+id/txtTimeStamp"
+            android:layout_marginTop="20dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:text="Not HelpFull"
+            android:textColor="#ffffff" />
+
 
     </RelativeLayout>
 
