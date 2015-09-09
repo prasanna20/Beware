@@ -14,6 +14,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -56,6 +57,7 @@ public class Home extends AppCompatActivity {
     JSONParser jsonParser;
     TextView txtactionbar;
     Button btnHome;
+    ImageButton searchbtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,7 +72,6 @@ public class Home extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(false);
         getSupportActionBar().setLogo(R.drawable.ic_launcher);
         getSupportActionBar().setDisplayUseLogoEnabled(true);
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.parseColor("#1a1a1a")));
 
 
@@ -173,6 +174,18 @@ public class Home extends AppCompatActivity {
                 adapter = new PostAdapter(Home.this , list);
                 listView.setAdapter(adapter);
                 adapter.notifyDataSetChanged();
+            }
+        });
+
+        searchbtn= (ImageButton) findViewById(R.id.searchbtn);
+        searchbtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(Home.this, SearchActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putString("FromScreen", "Search");
+                i.putExtras(bundle);
+                startActivity(i);
             }
         });
 

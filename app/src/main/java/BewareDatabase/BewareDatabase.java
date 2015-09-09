@@ -82,9 +82,7 @@ public class BewareDatabase extends SQLiteOpenHelper {
             db.delete("bw_UserDetails", null, null);
             db.insert("bw_UserDetails", null, values);
 
-            if (db.isOpen()) {
-                db.close();
-            }
+
 
             //Store it in server
             List<NameValuePair> params = new ArrayList<NameValuePair>();
@@ -100,15 +98,29 @@ public class BewareDatabase extends SQLiteOpenHelper {
 
             int success = json.getInt("success");
 
+
             if (success == 1) {
                 return true;
+            } else if (success == 2) {
+                String UserId= json.getString("UserId");
+                String sql = "UPDATE bw_UserDetails  SET UserId= '"+UserId+"'" ;
+                db.execSQL(sql);
+                if (db.isOpen()) {
+                    db.close();
+                }
+                return true;
             } else {
+                if (db.isOpen()) {
+                    db.close();
+                }
                 return false;
             }
+
         } catch (JSONException e) {
             Log.i("BewareDatabase", "Insert Failed");
             return false;
         }
+
     }
 
 
@@ -242,13 +254,12 @@ public class BewareDatabase extends SQLiteOpenHelper {
             selectQuery = "SELECT  PostId,UserId,HelpFull,NotHelpFull,UserName,Category,Subject,PostText,TopComment,TopCommentUserName,TimeStamp from bw_Post  Order By TimeStamp desc";
 
         } else if (Category.equalsIgnoreCase("MyPost")) {
-            selectQuery = "SELECT  PostId,UserId,HelpFull,NotHelpFull,UserName,Category,Subject,PostText,TopComment,TopCommentUserName,TimeStamp from bw_Post where UserId ='"+ GetUserId() +"'  Order By TimeStamp desc";
-        }  else
-        {
+            selectQuery = "SELECT  PostId,UserId,HelpFull,NotHelpFull,UserName,Category,Subject,PostText,TopComment,TopCommentUserName,TimeStamp from bw_Post where UserId ='" + GetUserId() + "'  Order By TimeStamp desc";
+        } else {
             selectQuery = "SELECT  PostId,UserId,HelpFull,NotHelpFull,UserName,Category,Subject,PostText,TopComment,TopCommentUserName,TimeStamp from bw_Post where Category='" + Category + "'";
         }
 
-        Log.i("BewareDatabase",selectQuery);
+        Log.i("BewareDatabase", selectQuery);
         Cursor mCursor = db.rawQuery(selectQuery, null);
 
 

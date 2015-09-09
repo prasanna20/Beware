@@ -4,28 +4,25 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     >
-    <TextView
-        android:id="@+id/txtactionbar"
+    <EditText
+        android:id="@+id/editText_Search"
         android:layout_width="wrap_content"
-        android:layout_height="fill_parent"
-        android:gravity="center_vertical"
-        android:layout_centerHorizontal="true"
-        android:textStyle="bold"
-        android:text="Home"
-        android:paddingLeft="15dp"
-        android:paddingRight="15dp"
-        />
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:digits="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789 "
+        android:hint="Enter your search word....."
+        android:padding="10dp" >
+    </EditText>
 
 
     <ImageButton
         android:id="@+id/searchbtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignRight="@+id/editText_Subject"
         android:layout_alignParentRight="true"
-        android:layout_centerVertical="true"
         android:layout_marginRight="10dp"
         android:background="#00000000"
-        android:onClick="GotoFriendlist"
         android:src="@drawable/send_msg_icon" />
 
 </RelativeLayout>

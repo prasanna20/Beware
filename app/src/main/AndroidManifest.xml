@@ -28,7 +28,7 @@
         <activity
             android:name=".WritePost"
             android:label="@string/title_activity_write_post"
-            android:windowSoftInputMode="stateHidden">
+            android:windowSoftInputMode="stateHidden" >
         </activity>
         <activity
             android:name=".Home"
@@ -37,7 +37,11 @@
         <activity
             android:name=".CommentActivity"
             android:label="@string/title_activity_comment"
-            android:windowSoftInputMode="stateHidden">
+            android:windowSoftInputMode="stateHidden" >
+        </activity>
+        <activity
+            android:name=".SearchActivity"
+            android:label="@string/title_activity_search" >
         </activity>
     </application>
 

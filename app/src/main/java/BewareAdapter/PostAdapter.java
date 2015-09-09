@@ -167,12 +167,8 @@ public class PostAdapter extends ArrayAdapter<Post> {
 
 
             //Start : To Set Icon for category
-           
-            if(list.get(position).getCategory().toString().equalsIgnoreCase("Places")) {
 
-            }
-            else if (list.get(position).getCategory().toString().equalsIgnoreCase("Hotels"))
-            {
+            if(list.get(position).getCategory().toString().equalsIgnoreCase("Places")) {
 
             }
             else if (list.get(position).getCategory().toString().equalsIgnoreCase("Health"))
