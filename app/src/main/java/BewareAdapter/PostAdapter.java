@@ -73,34 +73,34 @@ public class PostAdapter extends ArrayAdapter<Post> {
 
 
             viewHolder.txtCategory = (TextView) view.findViewById(R.id.txtCategory);
-            viewHolder.txtCategory.setTextColor(Color.BLACK);
+            viewHolder.txtCategory.setTextColor(Color.WHITE);
 
             viewHolder.txtPost = (TextView) view.findViewById(R.id.txtPost);
-            viewHolder.txtPost.setTextColor(Color.BLACK);
+            viewHolder.txtPost.setTextColor(Color.WHITE);
 
             viewHolder.txtSubject = (TextView) view.findViewById(R.id.txtSubject);
-            viewHolder.txtSubject.setTextColor(Color.BLACK);
+            viewHolder.txtSubject.setTextColor(Color.WHITE);
 
             viewHolder.txtComment = (TextView) view.findViewById(R.id.txtComment);
-            viewHolder.txtComment.setTextColor(Color.BLACK);
+            viewHolder.txtComment.setTextColor(Color.WHITE);
 
             viewHolder.txtCommentBy = (TextView) view.findViewById(R.id.txtCommentBy);
-            viewHolder.txtCommentBy.setTextColor(Color.BLACK);
+            viewHolder.txtCommentBy.setTextColor(Color.WHITE);
 
             viewHolder.txtHelpFull = (TextView) view.findViewById(R.id.txtHelpFull);
-            viewHolder.txtHelpFull.setTextColor(Color.BLACK);
+            viewHolder.txtHelpFull.setTextColor(Color.WHITE);
 
             viewHolder.txtNotHelpFull = (TextView) view.findViewById(R.id.txtNotHelpFull);
-            viewHolder.txtNotHelpFull.setTextColor(Color.BLACK);
+            viewHolder.txtNotHelpFull.setTextColor(Color.WHITE);
 
             viewHolder.txtTimeStamp = (TextView) view.findViewById(R.id.txtTimeStamp);
-            viewHolder.txtTimeStamp.setTextColor(Color.BLACK);
+            viewHolder.txtTimeStamp.setTextColor(Color.WHITE);
 
             viewHolder.btnHelpFull = (Button) view.findViewById(R.id.btnHelpFull);
-            viewHolder.btnHelpFull.setTextColor(Color.BLACK);
+            viewHolder.btnHelpFull.setTextColor(Color.WHITE);
 
             viewHolder.btnNotHelpFull = (Button) view.findViewById(R.id.btnNotHelpFull);
-            viewHolder.btnNotHelpFull.setTextColor(Color.BLACK);
+            viewHolder.btnNotHelpFull.setTextColor(Color.WHITE);
 
 
 
@@ -112,7 +112,7 @@ public class PostAdapter extends ArrayAdapter<Post> {
         ViewHolder holder = (ViewHolder) view.getTag();
         if (!list.get(position).toString().trim().equalsIgnoreCase("")) {
             if(list.get(position).getCategory().toString() != null) {
-                holder.txtCategory.setText(list.get(position).getCategory().toString());
+                //holder.txtCategory.setText(list.get(position).getCategory().toString());
             }
             else
             {

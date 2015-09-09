@@ -71,7 +71,7 @@ public class Home extends AppCompatActivity {
         getSupportActionBar().setLogo(R.drawable.ic_launcher);
         getSupportActionBar().setDisplayUseLogoEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
-        getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.parseColor("#40E0D0")));
+        getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.parseColor("#1a1a1a")));
 
 
             txtactionbar=(TextView) findViewById(R.id.txtactionbar);
