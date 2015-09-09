@@ -164,6 +164,40 @@ public class PostAdapter extends ArrayAdapter<Post> {
 
           holder.txtHelpFull.setText(String.valueOf(list.get(position).getHelpFull()));
           holder.txtNotHelpFull.setText(String.valueOf(list.get(position).getNotHelpFull()));
+
+
+            //Start : To Set Icon for category
+           
+            if(list.get(position).getCategory().toString().equalsIgnoreCase("Places")) {
+
+            }
+            else if (list.get(position).getCategory().toString().equalsIgnoreCase("Hotels"))
+            {
+
+            }
+            else if (list.get(position).getCategory().toString().equalsIgnoreCase("Health"))
+            {
+
+            }
+            else if (list.get(position).getCategory().toString().equalsIgnoreCase("Girls Safety"))
+            {
+
+            }
+            else if (list.get(position).getCategory().toString().equalsIgnoreCase("Company"))
+            {
+
+            }
+            else if (list.get(position).getCategory().toString().equalsIgnoreCase("People"))
+            {
+
+            }
+            else if (list.get(position).getCategory().toString().equalsIgnoreCase("Others"))
+            {
+
+            }
+            //End : To set Icon for Category
+
+
         }
 
         holder.txtComment.setOnClickListener(new View.OnClickListener() {
