@@ -54,11 +54,12 @@ public class Home extends AppCompatActivity {
     TextView txtComment;
     ImageButton btnMyPost;
     String FromScreen="No";
-    final Handler handler = new Handler();
+    Handler handler = new Handler();
     JSONParser jsonParser;
     TextView txtactionbar;
     Button btnHome;
     ImageButton searchbtn;
+    Boolean isHandlerRunning=false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -135,6 +136,12 @@ public class Home extends AppCompatActivity {
             public void onClick(View v) {
                 MenuLayout.setVisibility(View.INVISIBLE);
                 Intent i = new Intent(Home.this, WritePost.class);
+                if(isHandlerRunning)
+                {
+                    Log.i("home activity","handler removed");
+
+                    handler.removeCallbacksAndMessages(null);
+                }
                 startActivity(i);
             }
         });
@@ -183,6 +190,11 @@ public class Home extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(Home.this, SearchActivity.class);
+                if(isHandlerRunning)
+                {
+                    Log.i("home activity","handler removed");
+                    handler.removeCallbacksAndMessages(null);
+                }
                 Bundle bundle = new Bundle();
                 bundle.putString("FromScreen", "Search");
                 i.putExtras(bundle);
@@ -195,7 +207,7 @@ public class Home extends AppCompatActivity {
 
             @Override
             public void run() {
-
+                isHandlerRunning=true;
                 if (MasterDetails.isOnline(Home.this)) {
                     Log.i("Home", "Executing async");
                    new asyncGetLatestPost().execute();
@@ -283,7 +295,7 @@ public class Home extends AppCompatActivity {
                 params.add(new BasicNameValuePair("PostId", String.valueOf(PostId)));
 
                 json = jsonParser.makeHttpRequest(MasterDetails.GetPolls, "GET", params);
-                Log.i("Home", "got json");
+                Log.i("Home async", "got json");
                 if (json.length() > 0) {
                     // json success tag
                     success = json.getInt("success");
@@ -333,6 +345,15 @@ public class Home extends AppCompatActivity {
         @Override
         protected void onPostExecute(String result) {
             adapter.notifyDataSetChanged();
+        }
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if(isHandlerRunning)
+        {
+            handler.removeCallbacksAndMessages(null);
         }
     }
 }

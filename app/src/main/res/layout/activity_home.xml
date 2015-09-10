@@ -24,7 +24,6 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:divider="@null"
-                android:stackFromBottom="true"
                 android:textColor="#000000" />
 
         </LinearLayout>

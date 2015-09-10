@@ -1,5 +1,6 @@
 package com.fyshadows.beware;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -45,6 +46,7 @@ public class SearchActivity extends AppCompatActivity {
     String FromScreen;
     String SearchValue;
     final Handler handler = new Handler();
+    Boolean HandleRunning=false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -107,7 +109,14 @@ public class SearchActivity extends AppCompatActivity {
 
         switch (item.getItemId()) {
             case android.R.id.home:
-              finish();
+                if(HandleRunning) {
+                    handler.removeCallbacksAndMessages(null);
+                }
+                Intent i = new Intent(SearchActivity.this, Home.class);
+                Bundle bundle = new Bundle();
+                bundle.putString("FromScreen", "No");
+                i.putExtras(bundle);
+                startActivity(i);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -118,9 +127,14 @@ public class SearchActivity extends AppCompatActivity {
     public class asyncGetLatestPost extends AsyncTask<String, Void, String> {
         JSONParser jsonParser = new JSONParser();
         JSONObject json;
+        ProgressDialog searchingProgress = null;
+        ListView listView = (ListView) findViewById(R.id.list);
 
         @Override
         protected void onPreExecute() {
+            searchingProgress  = new ProgressDialog (SearchActivity.this);
+            searchingProgress.setMessage("Searching...");
+            searchingProgress.show();
             list=null;
         }
 
@@ -149,6 +163,7 @@ public class SearchActivity extends AppCompatActivity {
                 if (json.length() > 0) {
                     // json success tag
                     success = json.getInt("success");
+
                     if (success == 1) {
                         Log.i("Home", "Success");
                         // successfully received product details
@@ -191,24 +206,33 @@ public class SearchActivity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(String result) {
+            super.onPostExecute(result);
+            Log.i("Searchactivity", "Inpostexecute");
             if(list != null) {
-                listView = (ListView) findViewById(R.id.list);
+                if(HandleRunning)
+                {
+                    handler.removeCallbacksAndMessages(null);
+                    HandleRunning=false;
+                }
+
+
                 adapter = new PostAdapter(SearchActivity.this, list);
                 listView.setAdapter(adapter);
+                listView.smoothScrollByOffset(0);
                 adapter.notifyDataSetChanged();
-                listView.smoothScrollToPosition(0);
-                adapter.notifyDataSetChanged();
+                Log.i("Searchactivity", "Adapter notified");
+
+            searchingProgress.dismiss();
+
                 handler.postDelayed(new Runnable() {
 
                     @Override
                     public void run() {
+                        HandleRunning = true;
 
                         if (MasterDetails.isOnline(SearchActivity.this)) {
                             Log.i("SearchActivity", "Executing async");
                             adapter.notifyDataSetChanged();
-                        } else {
-
-                            Toast.makeText(SearchActivity.this, "No internet Connection.Please connect to internet..", Toast.LENGTH_LONG).show();
                         }
 
 
@@ -216,7 +240,6 @@ public class SearchActivity extends AppCompatActivity {
                     }
                 }, 150 * 50);
             }
-
         }
     }
 
