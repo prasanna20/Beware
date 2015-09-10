@@ -118,7 +118,14 @@ public class Home extends AppCompatActivity {
         btnMenu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                MenuLayout.setVisibility(View.VISIBLE);
+                if(MenuLayout.getVisibility() == View.VISIBLE) {
+                    MenuLayout.setVisibility(View.GONE);
+                    btnMenu.setImageResource(R.drawable.menu);
+                }
+                else {
+                    MenuLayout.setVisibility(View.VISIBLE);
+                    btnMenu.setImageResource(R.drawable.menuclose);
+                }
             }
         });
 
@@ -126,6 +133,7 @@ public class Home extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 MenuLayout.setVisibility(View.INVISIBLE);
+                btnMenu.setImageResource(R.drawable.menu);
             }
         });
 
@@ -143,6 +151,7 @@ public class Home extends AppCompatActivity {
         btnMyPost.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                btnMenu.setImageResource(R.drawable.menu);
                 txtactionbar.setText("My Post");
                 btnHome.setVisibility(View.VISIBLE);
                 MenuLayout.setVisibility(View.INVISIBLE);
