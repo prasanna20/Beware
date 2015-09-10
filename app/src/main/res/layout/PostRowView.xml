@@ -45,7 +45,6 @@
             android:textSize="@dimen/feed_item_profile_name"
             android:textStyle="bold" />
 
-
         <TextView
             android:id="@+id/txtPost"
             android:layout_width="fill_parent"
@@ -170,19 +169,19 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:text="4"
                     android:layout_gravity="center"
-                    android:gravity="center"
                     android:layout_marginRight="5dp"
-                    android:textColor="#FFFFFF"/>
+                    android:gravity="center"
+                    android:text="4"
+                    android:textColor="#FFFFFF" />
 
                 <ImageButton
                     android:layout_width="24dp"
                     android:layout_height="24dp"
-                    android:scaleType="fitCenter"
                     android:layout_gravity="center"
                     android:layout_marginRight="10dp"
                     android:background="#00000000"
+                    android:scaleType="fitCenter"
                     android:src="@drawable/comment" />
             </LinearLayout>
 
@@ -195,10 +194,10 @@
         android:id="@+id/categoryimage"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:src="@drawable/places"
         android:layout_marginLeft="30dp"
         android:layout_marginTop="0dp"
-        android:scaleType="fitCenter"/>
+        android:scaleType="fitCenter"
+        android:src="@drawable/places" />
 
 </RelativeLayout>
 
