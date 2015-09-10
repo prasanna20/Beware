@@ -38,7 +38,6 @@ public class WritePost extends AppCompatActivity {
     ArrayList<String> CategoryList;
     EditText  editText_Subject;
     EditText editText_PostText;
-    CheckBox chkBox_anonym;
     Button btnWrite;
     MasterDetails MasterDetails;
     JSONParser jsonParser = new JSONParser();
@@ -53,7 +52,6 @@ public class WritePost extends AppCompatActivity {
         getSupportActionBar().setDisplayShowCustomEnabled(true);
         getSupportActionBar().setCustomView(R.layout.actionbar_writepost);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setLogo(R.drawable.ic_launcher);
         getSupportActionBar().setDisplayUseLogoEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
@@ -69,7 +67,6 @@ public class WritePost extends AppCompatActivity {
 
         editText_Subject=(EditText) findViewById(R.id.editText_Subject);
         editText_PostText=(EditText) findViewById(R.id.editText_PostText);
-        chkBox_anonym=(CheckBox) findViewById(R.id.chkBox_anonym);
 
         btnWrite=(Button) findViewById(R.id.btnWrite);
         btnWrite.setOnClickListener(new View.OnClickListener() {
@@ -109,16 +106,7 @@ public class WritePost extends AppCompatActivity {
                 CreatePost.setSubject(editText_Subject.getText().toString());
                 CreatePost.setCategory(spinnerCategory.getSelectedItem().toString());
                 CreatePost.setPostText(editText_PostText.getText().toString());
-                if(chkBox_anonym.isChecked())
-                {
-                    Log.i("WritePost","Checked");
-                    CreatePost.setAnonymous(1);
-                }
-                else
-                {
-                    Log.i("WritePost","Not Checked");
-                    CreatePost.setAnonymous(0);
-                }
+                CreatePost.setAnonymous(0);
 
 
                 if (MasterDetails.isOnline(WritePost.this)) {

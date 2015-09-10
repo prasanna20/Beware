@@ -5,6 +5,9 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.style.ForegroundColorSpan;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -129,6 +132,17 @@ public class PostAdapter extends ArrayAdapter<Post> {
             }
 
             if(list.get(position).getPostText() != null) {
+                if(list.get(position).getPostText().toString().length()>150 )//&& myposition != position
+                {
+                    String desc=	list.get(position).getPostText().toString().substring(0, 150)+ "  Read more...";
+                    Spannable WordtoSpan = new SpannableString(desc);
+                    WordtoSpan.setSpan(new ForegroundColorSpan(Color.rgb(248, 186, 20)),  101, 112, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                    holder.txtPost.setText(WordtoSpan);
+                }
+                else
+                {
+                    holder.txtPost.setText(list.get(position).getPostText().toString());
+                }
                 holder.txtPost.setText(list.get(position).getPostText().toString());
             }
             else
@@ -239,7 +253,7 @@ public class PostAdapter extends ArrayAdapter<Post> {
             @Override
             public void onClick(View view) {
                 new asyncGetLatestPost(list.get(position).getPostId(),1).execute();
-                list.get(position).setHelpFull(list.get(position).getHelpFull()+1);
+                list.get(position).setHelpFull(list.get(position).getHelpFull() + 1);
             }
 
         });
@@ -248,12 +262,20 @@ public class PostAdapter extends ArrayAdapter<Post> {
             @Override
             public void onClick(View view) {
                 new asyncGetLatestPost(list.get(position).getPostId(),2).execute();
-                list.get(position).setNotHelpFull(list.get(position).getNotHelpFull()+1);
+                list.get(position).setNotHelpFull(list.get(position).getNotHelpFull() + 1);
+            }
+
+        });
+
+        holder.txtPost.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                list.get(position).setPostText(list.get(position).getPostText().toString());
             }
 
         });
         return view;
- }
+    }
 
     static class ViewHolder {
         protected TextView txtCategory;

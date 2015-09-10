@@ -30,25 +30,7 @@
 
     </RelativeLayout>
 
-    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
-        android:id="@+id/question_layout"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:context=".Questionhome">
 
-        <Button
-            android:id="@+id/btnHome"
-            android:layout_width="wrap_content"
-            android:layout_height="40dp"
-            android:layout_alignParentTop="true"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="20dp"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp"
-            android:text="Home"
-            android:textColor="#ffffff" />
-    </RelativeLayout>
 
     <RelativeLayout
         android:id="@+id/top_layout"

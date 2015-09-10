@@ -218,13 +218,13 @@ public class SearchActivity extends AppCompatActivity {
 
                 adapter = new PostAdapter(SearchActivity.this, list);
                 listView.setAdapter(adapter);
-                listView.smoothScrollByOffset(0);
+                listView.smoothScrollToPosition(0);
                 adapter.notifyDataSetChanged();
                 Log.i("Searchactivity", "Adapter notified");
 
-            searchingProgress.dismiss();
 
-                handler.postDelayed(new Runnable() {
+
+             /*   handler.postDelayed(new Runnable() {
 
                     @Override
                     public void run() {
@@ -238,8 +238,10 @@ public class SearchActivity extends AppCompatActivity {
 
                         handler.postDelayed(this, 50 * 50);
                     }
-                }, 150 * 50);
+                }, 150 * 50);*/
             }
+
+            searchingProgress.dismiss();
         }
     }
 
