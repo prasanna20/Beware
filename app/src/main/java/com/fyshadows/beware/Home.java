@@ -8,6 +8,7 @@ import android.os.AsyncTask;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.transition.TransitionManager;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
@@ -42,8 +43,8 @@ import BewareDatabase.BewareDatabase;
 
 public class Home extends AppCompatActivity {
 
-    Button btnMenu;
-    Button btnCreatePost;
+    ImageButton btnMenu;
+    ImageButton btnCreatePost;
     RelativeLayout MenuLayout;
     private ListView listView;
     ArrayList<Post> PostArray;
@@ -51,7 +52,7 @@ public class Home extends AppCompatActivity {
     BewareDatabase db;
     PostAdapter adapter;
     TextView txtComment;
-    Button btnMyPost;
+    ImageButton btnMyPost;
     String FromScreen="No";
     final Handler handler = new Handler();
     JSONParser jsonParser;
@@ -113,7 +114,7 @@ public class Home extends AppCompatActivity {
         MenuLayout = (RelativeLayout) findViewById(R.id.top_layout);
         MenuLayout.setVisibility(View.INVISIBLE);
 
-        btnMenu = (Button) findViewById(R.id.btnMenu);
+        btnMenu = (ImageButton) findViewById(R.id.btnMenu);
         btnMenu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -128,7 +129,7 @@ public class Home extends AppCompatActivity {
             }
         });
 
-        btnCreatePost = (Button) findViewById(R.id.btnCreatePost);
+        btnCreatePost = (ImageButton) findViewById(R.id.btnCreatePost);
         btnCreatePost.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -138,7 +139,7 @@ public class Home extends AppCompatActivity {
             }
         });
 
-        btnMyPost= (Button) findViewById(R.id.btnMyPost);
+        btnMyPost= (ImageButton) findViewById(R.id.btnMyPost);
         btnMyPost.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
