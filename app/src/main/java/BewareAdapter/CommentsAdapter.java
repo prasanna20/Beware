@@ -61,13 +61,10 @@ public class CommentsAdapter extends ArrayAdapter<Comment> {
 
 
             viewHolder.txtComment = (TextView) view.findViewById(R.id.txtComment);
-            viewHolder.txtComment.setTextColor(Color.BLACK);
 
             viewHolder.txtCommentedBy = (TextView) view.findViewById(R.id.txtCommentedBy);
-            viewHolder.txtCommentedBy.setTextColor(Color.BLACK);
 
             viewHolder.txtTimestamp = (TextView) view.findViewById(R.id.txtTimestamp);
-            viewHolder.txtTimestamp.setTextColor(Color.BLACK);
 
 
             view.setTag(viewHolder);

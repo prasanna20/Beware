@@ -6,4 +6,13 @@
     <color name="feed_item_bg">#ffffff</color>
     <color name="feed_item_border">#c2c3c8</color>
     <color name="timestamp">#a0a3a7</color>
+
+
+    <color name="places">#53d37e</color>
+    <color name="places1">#47c772</color>
+    <color name="hotels">#ce5250</color>
+    <color name="hotels1">#c94d4d</color>
+    <color name="health">#58bbb8</color>
+    <color name="health1">#4fb2af</color>
+
 </resources>

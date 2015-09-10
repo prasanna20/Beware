@@ -11,6 +11,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.fyshadows.beware.CommentActivity;
@@ -102,6 +105,12 @@ public class PostAdapter extends ArrayAdapter<Post> {
             viewHolder.btnNotHelpFull = (Button) view.findViewById(R.id.btnNotHelpFull);
             viewHolder.btnNotHelpFull.setTextColor(Color.WHITE);
 
+            viewHolder.catImage = (ImageView) view.findViewById(R.id.categoryimage);
+
+            viewHolder.topbase = (RelativeLayout) view.findViewById(R.id.topbase);
+
+            viewHolder.bottombar = (LinearLayout) view.findViewById(R.id.bottombar);
+
 
 
             view.setTag(viewHolder);
@@ -112,7 +121,7 @@ public class PostAdapter extends ArrayAdapter<Post> {
         ViewHolder holder = (ViewHolder) view.getTag();
         if (!list.get(position).toString().trim().equalsIgnoreCase("")) {
             if(list.get(position).getCategory().toString() != null) {
-                //holder.txtCategory.setText(list.get(position).getCategory().toString());
+                holder.txtCategory.setText(list.get(position).getCategory().toString());
             }
             else
             {
@@ -169,31 +178,45 @@ public class PostAdapter extends ArrayAdapter<Post> {
             //Start : To Set Icon for category
            
             if(list.get(position).getCategory().toString().equalsIgnoreCase("Places")) {
-
+                holder.catImage.setImageResource(R.drawable.places);
+                holder.topbase.setBackgroundColor(Color.parseColor("#53d37e"));
+                holder.bottombar.setBackgroundColor(Color.parseColor("#47c772"));
             }
             else if (list.get(position).getCategory().toString().equalsIgnoreCase("Hotels"))
             {
-
+                holder.catImage.setImageResource(R.drawable.hotels);
+                holder.topbase.setBackgroundColor(Color.parseColor("#ce5250"));
+                holder.bottombar.setBackgroundColor(Color.parseColor("#c94d4d"));
             }
             else if (list.get(position).getCategory().toString().equalsIgnoreCase("Health"))
             {
-
+                holder.catImage.setImageResource(R.drawable.health);
+                holder.topbase.setBackgroundColor(Color.parseColor("#58bbb8"));
+                holder.bottombar.setBackgroundColor(Color.parseColor("#4fb2af"));
             }
             else if (list.get(position).getCategory().toString().equalsIgnoreCase("Girls Safety"))
             {
-
+                holder.catImage.setImageResource(R.drawable.safety);
+                holder.topbase.setBackgroundColor(Color.parseColor("#e2e02f"));
+                holder.bottombar.setBackgroundColor(Color.parseColor("#cecc26"));
             }
             else if (list.get(position).getCategory().toString().equalsIgnoreCase("Company"))
             {
-
+                holder.catImage.setImageResource(R.drawable.company);
+                holder.topbase.setBackgroundColor(Color.parseColor("#eea043"));
+                holder.bottombar.setBackgroundColor(Color.parseColor("#d88b31"));
             }
             else if (list.get(position).getCategory().toString().equalsIgnoreCase("People"))
             {
-
+                holder.catImage.setImageResource(R.drawable.people);
+                holder.topbase.setBackgroundColor(Color.parseColor("#c66dd6"));
+                holder.bottombar.setBackgroundColor(Color.parseColor("#b24bc4"));
             }
             else if (list.get(position).getCategory().toString().equalsIgnoreCase("Others"))
             {
-
+                holder.catImage.setImageResource(R.drawable.others);
+                holder.topbase.setBackgroundColor(Color.parseColor("#7988e5"));
+                holder.bottombar.setBackgroundColor(Color.parseColor("#5969c8"));
             }
             //End : To set Icon for Category
 
@@ -243,6 +266,9 @@ public class PostAdapter extends ArrayAdapter<Post> {
         protected TextView txtTimeStamp;
         protected Button btnHelpFull;
         protected Button btnNotHelpFull;
+        protected ImageView catImage;
+        protected RelativeLayout topbase;
+        protected LinearLayout bottombar;
     }
 
     public class asyncGetLatestPost extends AsyncTask<String, Void, String> {

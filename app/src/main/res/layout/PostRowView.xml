@@ -7,15 +7,16 @@
     android:orientation="vertical">
 
     <RelativeLayout
+        android:id="@+id/topbase"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
-        android:layout_marginTop="25dp"
+        android:layout_marginTop="30dp"
         android:background="#53d37e"
         android:orientation="vertical"
         android:paddingBottom="0dp"
-        android:paddingTop="20dp">
+        android:paddingTop="10dp">
 
         <TextView
             android:id="@+id/txtCategory"
@@ -36,6 +37,7 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/txtCategory"
+            android:layout_marginTop="10dp"
             android:paddingLeft="20dp"
             android:paddingRight="20dp"
             android:text="Subject"
@@ -49,9 +51,9 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/txtSubject"
+            android:layout_marginTop="10dp"
             android:paddingLeft="20dp"
             android:paddingRight="20dp"
-            android:layout_marginTop="10dp"
             android:text="Post post Post Post"
             android:textColor="@color/white"
             android:textStyle="bold" />
@@ -61,9 +63,9 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/txtPost"
+            android:layout_marginTop="10dp"
             android:paddingLeft="20dp"
             android:paddingRight="20dp"
-            android:layout_marginTop="10dp"
             android:text="Comment"
             android:textColor="@color/white"
             android:textStyle="bold" />
@@ -80,81 +82,123 @@
             android:textSize="@dimen/feed_item_timestamp" />
 
         <TextView
-            android:id="@+id/txtHelpFull"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/txtCommentBy"
-            android:paddingLeft="20dp"
-            android:paddingRight="20dp"
-            android:text="HelpFull"
-            android:textColor="@color/white"
-            android:textSize="@dimen/feed_item_timestamp" />
-
-
-        <TextView
-            android:id="@+id/txtNotHelpFull"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/txtHelpFull"
-            android:paddingLeft="20dp"
-            android:paddingRight="20dp"
-            android:text="NotHelpFull"
-            android:textColor="@color/white"
-            android:textSize="@dimen/feed_item_timestamp" />
-
-        <TextView
             android:id="@+id/txtTimeStamp"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/txtNotHelpFull"
+            android:layout_below="@id/txtCommentBy"
             android:paddingLeft="20dp"
             android:paddingRight="20dp"
             android:text="Time Stamp"
             android:textColor="@color/white"
             android:textSize="@dimen/feed_item_timestamp" />
 
-        <Button
-            android:id="@+id/btnHelpFull"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:id="@+id/bottombar"
+            android:layout_width="match_parent"
             android:layout_height="40dp"
             android:layout_below="@+id/txtTimeStamp"
-            android:layout_marginTop="20dp"
-            android:background="#70d68d"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp"
-            android:text="HelpFull"
-            android:textColor="#ffffff" />
+            android:layout_marginTop="10dp"
+            android:background="#47c772"
+            android:orientation="horizontal">
 
-        <Button
-            android:id="@+id/btnNotHelpFull"
-            android:layout_width="wrap_content"
-            android:layout_height="40dp"
-            android:layout_alignParentRight="true"
-            android:layout_below="@+id/txtTimeStamp"
-            android:layout_marginTop="20dp"
-            android:background="#70d68d"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp"
-            android:text="Not HelpFull"
-            android:textColor="#ffffff" />
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="20">
+
+                <TextView
+                    android:id="@+id/txtHelpFull"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/txtCommentBy"
+                    android:paddingLeft="20dp"
+                    android:paddingRight="5dp"
+                    android:text="0"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/feed_item_timestamp" />
+
+                <Button
+                    android:id="@+id/btnHelpFull"
+                    android:layout_width="wrap_content"
+                    android:layout_height="40dp"
+                    android:layout_below="@+id/txtTimeStamp"
+                    android:background="#00000000"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp"
+                    android:text="HelpFull"
+                    android:textAllCaps="false"
+                    android:textColor="#ffffff" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="20">
+
+
+                <TextView
+                    android:id="@+id/txtNotHelpFull"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/txtHelpFull"
+                    android:paddingLeft="5dp"
+                    android:paddingRight="5dp"
+                    android:text="0"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/feed_item_timestamp" />
+
+                <Button
+                    android:id="@+id/btnNotHelpFull"
+                    android:layout_width="wrap_content"
+                    android:layout_height="40dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_below="@+id/txtTimeStamp"
+                    android:background="#00000000"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp"
+                    android:text="Not HelpFull"
+                    android:textAllCaps="false"
+                    android:textColor="#ffffff" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="10">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:text="4"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:layout_marginRight="5dp"
+                    android:textColor="#FFFFFF"/>
+
+                <ImageButton
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:scaleType="fitCenter"
+                    android:layout_gravity="center"
+                    android:layout_marginRight="10dp"
+                    android:background="#00000000"
+                    android:src="@drawable/comment" />
+            </LinearLayout>
+
+        </LinearLayout>
 
 
     </RelativeLayout>
 
-    <TextView
-        android:id="@+id/txtCategoryimg"
+    <ImageView
+        android:id="@+id/categoryimage"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:layout_alignParentTop="true"
+        android:src="@drawable/places"
         android:layout_marginLeft="30dp"
         android:layout_marginTop="0dp"
-        android:background="@drawable/categorybg"
-        android:gravity="center"
-        android:text="C"
-        android:textAlignment="center"
-        android:textColor="@color/white"
-        android:textSize="@dimen/feed_item_profile_name"
-        android:textStyle="bold" />
+        android:scaleType="fitCenter"/>
 
 </RelativeLayout>
 
