@@ -1,6 +1,7 @@
 package com.fyshadows.beware;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -9,13 +10,16 @@ import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import org.apache.http.NameValuePair;
@@ -46,7 +50,8 @@ public class SearchActivity extends AppCompatActivity {
     String FromScreen;
     String SearchValue;
     final Handler handler = new Handler();
-    Boolean HandleRunning=false;
+    Boolean HandleRunning = false;
+    TextView txtNoSearch;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,7 +67,50 @@ public class SearchActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayUseLogoEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
+        txtNoSearch = (TextView) findViewById(R.id.txtNoSearch);
         editText_Search = (EditText) findViewById(R.id.editText_Search);
+        editText_Search.setOnKeyListener(new View.OnKeyListener()
+        {
+           @Override
+            public boolean onKey(View v, int keyCode, KeyEvent event)
+            {
+                Log.i("Search", "Clicked");
+                if (event.getAction() == KeyEvent.ACTION_DOWN)
+                {
+                    switch (keyCode)
+                    {
+                        case KeyEvent.KEYCODE_DPAD_CENTER:
+                        case KeyEvent.KEYCODE_ENTER:
+                            if (editText_Search.getText().toString().length() <= 0) {
+                                Toast.makeText(SearchActivity.this, "Please Enter Search Text", Toast.LENGTH_SHORT).show();
+                                editText_Search.requestFocus();
+                            } else {
+                                SearchValue = editText_Search.getText().toString();
+                                if (MasterDetails.isOnline(SearchActivity.this)) {
+                                    Log.i("Home", "Executing async");
+                                    new asyncGetLatestPost().execute();
+                                } else {
+
+                                    Toast.makeText(SearchActivity.this, "No internet Connection.Please connect to internet..", Toast.LENGTH_LONG).show();
+                                }
+
+
+                                Boolean searchFocus = editText_Search.isFocused();
+                                if (searchFocus) {
+                                    InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+                                    imm.hideSoftInputFromWindow(editText_Search.getWindowToken(), 0);
+                                }
+                            }
+
+                            return true;
+                        default:
+                            break;
+                    }
+                }
+                return false;
+            }
+        });
+
         searchbtn = (ImageButton) findViewById(R.id.searchbtn);
         searchbtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -79,7 +127,15 @@ public class SearchActivity extends AppCompatActivity {
 
                         Toast.makeText(SearchActivity.this, "No internet Connection.Please connect to internet..", Toast.LENGTH_LONG).show();
                     }
+
+                    Boolean searchFocus = editText_Search.isFocused();
+                    if (searchFocus) {
+                        InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+                        imm.hideSoftInputFromWindow(editText_Search.getWindowToken(), 0);
+                    }
                 }
+
+
 
             }
         });
@@ -87,8 +143,6 @@ public class SearchActivity extends AppCompatActivity {
         Bundle bundle = getIntent().getExtras();
         FromScreen = String.valueOf(bundle.getString("FromScreen"));
         Log.i("FromScreen", FromScreen);
-
-
 
 
     }
@@ -109,7 +163,7 @@ public class SearchActivity extends AppCompatActivity {
 
         switch (item.getItemId()) {
             case android.R.id.home:
-                if(HandleRunning) {
+                if (HandleRunning) {
                     handler.removeCallbacksAndMessages(null);
                 }
                 Intent i = new Intent(SearchActivity.this, Home.class);
@@ -132,10 +186,10 @@ public class SearchActivity extends AppCompatActivity {
 
         @Override
         protected void onPreExecute() {
-            searchingProgress  = new ProgressDialog (SearchActivity.this);
+            searchingProgress = new ProgressDialog(SearchActivity.this);
             searchingProgress.setMessage("Searching...");
             searchingProgress.show();
-            list=null;
+            list = null;
         }
 
         @Override
@@ -208,37 +262,22 @@ public class SearchActivity extends AppCompatActivity {
         protected void onPostExecute(String result) {
             super.onPostExecute(result);
             Log.i("Searchactivity", "Inpostexecute");
-            if(list != null) {
-                if(HandleRunning)
-                {
-                    handler.removeCallbacksAndMessages(null);
-                    HandleRunning=false;
-                }
+            if (list != null) {
 
 
-                adapter = new PostAdapter(SearchActivity.this, list);
+                txtNoSearch.setVisibility(View.INVISIBLE);
+
+                adapter = new PostAdapter(SearchActivity.this, list, "Search");
                 listView.setAdapter(adapter);
-                listView.smoothScrollToPosition(0);
                 adapter.notifyDataSetChanged();
+                listView.smoothScrollToPosition(0);
                 Log.i("Searchactivity", "Adapter notified");
 
 
-
-             /*   handler.postDelayed(new Runnable() {
-
-                    @Override
-                    public void run() {
-                        HandleRunning = true;
-
-                        if (MasterDetails.isOnline(SearchActivity.this)) {
-                            Log.i("SearchActivity", "Executing async");
-                            adapter.notifyDataSetChanged();
-                        }
-
-
-                        handler.postDelayed(this, 50 * 50);
-                    }
-                }, 150 * 50);*/
+            } else {
+                listView.setAdapter(null);
+                txtNoSearch.setVisibility(View.VISIBLE);
+                txtNoSearch.setText("Sorry ! No Results found..");
             }
 
             searchingProgress.dismiss();

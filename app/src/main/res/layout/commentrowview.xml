@@ -25,23 +25,12 @@
             android:textSize="@dimen/feed_item_profile_name"
             android:textStyle="bold" />
 
-        <TextView
-            android:id="@+id/txtCommentedBy"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/txtComment"
-            android:layout_marginTop="10dp"
-            android:text="Commented By"
-            android:textColor="@color/white"
-            android:textSize="12sp"
-            android:textStyle="bold" />
-
 
         <TextView
             android:id="@+id/txtTimestamp"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/txtCommentedBy"
+            android:layout_below="@id/txtComment"
             android:layout_marginTop="10dp"
             android:paddingRight="@dimen/feed_item_status_pad_left_right"
             android:text="Time stamp"

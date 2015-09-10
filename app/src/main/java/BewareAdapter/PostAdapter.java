@@ -14,10 +14,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.fyshadows.beware.CommentActivity;
 import com.fyshadows.beware.Home;
@@ -46,14 +48,15 @@ public class PostAdapter extends ArrayAdapter<Post> {
     private final Activity context;
     private static List<Post> list = null;
     private int PostID;
-
+    private String FromActivity;
 
 
     public PostAdapter(Activity context,
-                            List<Post> list) {
+                       List<Post> list,String FromActivity) {
         super(context, R.layout.postrowview, list);
         this.context = context;
         this.list = list;
+        this.FromActivity=FromActivity;
     }
 
     @Override
@@ -68,7 +71,7 @@ public class PostAdapter extends ArrayAdapter<Post> {
 
 
     @Override
-    public View getView(final int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, final View convertView, ViewGroup parent) {
 
         View view = null;
         Log.i("a", "into get view");
@@ -87,12 +90,6 @@ public class PostAdapter extends ArrayAdapter<Post> {
             viewHolder.txtSubject = (TextView) view.findViewById(R.id.txtSubject);
             viewHolder.txtSubject.setTextColor(Color.WHITE);
 
-            viewHolder.txtComment = (TextView) view.findViewById(R.id.txtComment);
-            viewHolder.txtComment.setTextColor(Color.WHITE);
-
-            viewHolder.txtCommentBy = (TextView) view.findViewById(R.id.txtCommentBy);
-            viewHolder.txtCommentBy.setTextColor(Color.WHITE);
-
             viewHolder.txtHelpFull = (TextView) view.findViewById(R.id.txtHelpFull);
             viewHolder.txtHelpFull.setTextColor(Color.WHITE);
 
@@ -108,11 +105,16 @@ public class PostAdapter extends ArrayAdapter<Post> {
             viewHolder.btnNotHelpFull = (Button) view.findViewById(R.id.btnNotHelpFull);
             viewHolder.btnNotHelpFull.setTextColor(Color.WHITE);
 
+            viewHolder.txtComment = (TextView) view.findViewById(R.id.txtComment);
+
             viewHolder.catImage = (ImageView) view.findViewById(R.id.categoryimage);
 
             viewHolder.topbase = (RelativeLayout) view.findViewById(R.id.topbase);
 
             viewHolder.bottombar = (LinearLayout) view.findViewById(R.id.bottombar);
+
+
+            viewHolder.btnComment = (ImageButton) view.findViewById(R.id.btnComment);
 
 
 
@@ -121,123 +123,104 @@ public class PostAdapter extends ArrayAdapter<Post> {
             view = convertView;
         }
 
-        ViewHolder holder = (ViewHolder) view.getTag();
+        final ViewHolder holder = (ViewHolder) view.getTag();
         if (!list.get(position).toString().trim().equalsIgnoreCase("")) {
-            if(list.get(position).getCategory().toString() != null) {
+            if (list.get(position).getCategory().toString() != null) {
                 holder.txtCategory.setText(list.get(position).getCategory().toString());
-            }
-            else
-            {
+            } else {
                 holder.txtCategory.setText("Category");
             }
 
-            if(list.get(position).getPostText() != null) {
-                if(list.get(position).getPostText().toString().length()>150 )//&& myposition != position
+            if (list.get(position).getPostText() != null) {
+                Log.i("posttext length", String.valueOf(list.get(position).getPostText().toString().length()));
+                if (list.get(position).getPostText().toString().length() > 150)//&& myposition != position
                 {
-                    String desc=	list.get(position).getPostText().toString().substring(0, 150)+ "  Read more...";
+                    String desc = list.get(position).getPostText().toString().substring(0, 150) + "  Read more...";
                     Spannable WordtoSpan = new SpannableString(desc);
-                    WordtoSpan.setSpan(new ForegroundColorSpan(Color.rgb(248, 186, 20)),  101, 112, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                    WordtoSpan.setSpan(new ForegroundColorSpan(Color.rgb(248, 186, 20)), 151, 163, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
                     holder.txtPost.setText(WordtoSpan);
-                }
-                else
-                {
+                } else {
                     holder.txtPost.setText(list.get(position).getPostText().toString());
                 }
-                holder.txtPost.setText(list.get(position).getPostText().toString());
-            }
-            else
-            {
+
+            } else {
                 holder.txtPost.setText("");
             }
 
-            if(list.get(position).getSubject().toString()!= null) {
+            if (list.get(position).getSubject().toString() != null) {
                 holder.txtSubject.setText(list.get(position).getSubject().toString());
-            }
-            else
-            {
+            } else {
                 holder.txtSubject.setText("");
             }
-            Log.i("postAdapter",list.get(position).getTopComment().toString());
-            if(!list.get(position).getTopComment().equalsIgnoreCase("null")) {
-                holder.txtComment.setText(list.get(position).getTopComment().toString());
-            }
-            else
-            {
-                holder.txtComment.setText("");
-            }
 
-            Log.i("postAdapter",list.get(position).getTopCommentUserName().toString());
-            if(!list.get(position).getTopCommentUserName().toString().equalsIgnoreCase("null")) {
-                holder.txtCommentBy.setText(list.get(position).getTopCommentUserName().toString());
-            }
-            else
-            {
-                holder.txtCommentBy.setText("");
-            }
+            if (list.get(position).getTimeStamp().toString() != null) {
+                holder.txtTimeStamp.setText(MasterDetails.formateDateFromstring("yyyy-MM-dd hh:mm:ss", "dd MMM yyyy HH:mm", list.get(position).getTimeStamp().toString()));
 
-            if(list.get(position).getTimeStamp().toString() != null) {
-                holder.txtTimeStamp.setText(list.get(position).getTimeStamp().toString());
-            }
-            else
-            {
+            } else {
                 holder.txtTimeStamp.setText("");
             }
 
+            if (!list.get(position).getTopComment().toString().equalsIgnoreCase("null")) {
+                holder.txtComment.setText(list.get(position).getTopComment().toString());
+            } else {
+                holder.txtComment.setText("0");
+            }
 
 
-          holder.txtHelpFull.setText(String.valueOf(list.get(position).getHelpFull()));
-          holder.txtNotHelpFull.setText(String.valueOf(list.get(position).getNotHelpFull()));
+
+
+            holder.txtHelpFull.setText(String.valueOf(list.get(position).getHelpFull()));
+            holder.txtNotHelpFull.setText(String.valueOf(list.get(position).getNotHelpFull()));
 
 
             //Start : To Set Icon for category
-           
-            if(list.get(position).getCategory().toString().equalsIgnoreCase("Places")) {
+
+            if (list.get(position).getCategory().toString().equalsIgnoreCase("Places")) {
                 holder.catImage.setImageResource(R.drawable.places);
                 holder.topbase.setBackgroundColor(Color.parseColor("#53d37e"));
                 holder.bottombar.setBackgroundColor(Color.parseColor("#47c772"));
-            }
-            else if (list.get(position).getCategory().toString().equalsIgnoreCase("Hotels"))
-            {
+            } else if (list.get(position).getCategory().toString().equalsIgnoreCase("Food")) {
                 holder.catImage.setImageResource(R.drawable.hotels);
                 holder.topbase.setBackgroundColor(Color.parseColor("#ce5250"));
                 holder.bottombar.setBackgroundColor(Color.parseColor("#c94d4d"));
-            }
-            else if (list.get(position).getCategory().toString().equalsIgnoreCase("Health"))
-            {
+            } else if (list.get(position).getCategory().toString().equalsIgnoreCase("Health")) {
                 holder.catImage.setImageResource(R.drawable.health);
                 holder.topbase.setBackgroundColor(Color.parseColor("#58bbb8"));
                 holder.bottombar.setBackgroundColor(Color.parseColor("#4fb2af"));
-            }
-            else if (list.get(position).getCategory().toString().equalsIgnoreCase("Girls Safety"))
-            {
+            } else if (list.get(position).getCategory().toString().equalsIgnoreCase("Girls Safety")) {
                 holder.catImage.setImageResource(R.drawable.safety);
                 holder.topbase.setBackgroundColor(Color.parseColor("#e2e02f"));
                 holder.bottombar.setBackgroundColor(Color.parseColor("#cecc26"));
-            }
-            else if (list.get(position).getCategory().toString().equalsIgnoreCase("Company"))
-            {
+            } else if (list.get(position).getCategory().toString().equalsIgnoreCase("Company")) {
                 holder.catImage.setImageResource(R.drawable.company);
                 holder.topbase.setBackgroundColor(Color.parseColor("#eea043"));
                 holder.bottombar.setBackgroundColor(Color.parseColor("#d88b31"));
-            }
-            else if (list.get(position).getCategory().toString().equalsIgnoreCase("People"))
-            {
+            } else if (list.get(position).getCategory().toString().equalsIgnoreCase("People")) {
                 holder.catImage.setImageResource(R.drawable.people);
                 holder.topbase.setBackgroundColor(Color.parseColor("#c66dd6"));
                 holder.bottombar.setBackgroundColor(Color.parseColor("#b24bc4"));
-            }
-            else if (list.get(position).getCategory().toString().equalsIgnoreCase("Others"))
-            {
+            } else if (list.get(position).getCategory().toString().equalsIgnoreCase("Others")) {
                 holder.catImage.setImageResource(R.drawable.others);
                 holder.topbase.setBackgroundColor(Color.parseColor("#7988e5"));
                 holder.bottombar.setBackgroundColor(Color.parseColor("#5969c8"));
             }
             //End : To set Icon for Category
 
+            if(FromActivity.equalsIgnoreCase("MyPost"))
+            {
+                holder.btnHelpFull.setEnabled(false);
+                holder.btnNotHelpFull.setEnabled(false);
+            }
+            else
+            {
+                holder.btnHelpFull.setEnabled(true);
+                holder.btnNotHelpFull.setEnabled(true);
+            }
+
 
         }
 
-        holder.txtComment.setOnClickListener(new View.OnClickListener() {
+        holder.btnComment.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent i = new Intent(getContext(), CommentActivity.class);
@@ -252,8 +235,17 @@ public class PostAdapter extends ArrayAdapter<Post> {
         holder.btnHelpFull.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                new asyncGetLatestPost(list.get(position).getPostId(),1).execute();
-                list.get(position).setHelpFull(list.get(position).getHelpFull() + 1);
+                if (MasterDetails.isOnline(getContext())) {
+                    if(!list.get(position).getTopCommentUserName().equalsIgnoreCase("1")) {
+                        new asyncGetLatestPost(list.get(position).getPostId(), 1).execute();
+                        list.get(position).setHelpFull(list.get(position).getHelpFull() + 1);
+                        list.get(position).setTopCommentUserName("1");
+                    }else {
+                        Toast.makeText(getContext(), "You already voted.", Toast.LENGTH_SHORT).show();
+                    }
+                } else {
+                    Toast.makeText(getContext(), "You are on offline mode.", Toast.LENGTH_SHORT).show();
+                }
             }
 
         });
@@ -261,16 +253,29 @@ public class PostAdapter extends ArrayAdapter<Post> {
         holder.btnNotHelpFull.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                new asyncGetLatestPost(list.get(position).getPostId(),2).execute();
-                list.get(position).setNotHelpFull(list.get(position).getNotHelpFull() + 1);
+                if (MasterDetails.isOnline(getContext())) {
+                    if(!list.get(position).getTopCommentUserName().equalsIgnoreCase("1")) {
+                    new asyncGetLatestPost(list.get(position).getPostId(), 2).execute();
+                    list.get(position).setNotHelpFull(list.get(position).getNotHelpFull() + 1);
+                    list.get(position).setTopCommentUserName("1");
+                        list.get(position).setTopCommentUserName("1");
+                    }else {
+                        Toast.makeText(getContext(), "You already voted.", Toast.LENGTH_SHORT).show();
+                    }
+                } else {
+                    Toast.makeText(getContext(), "You are on offline mode.", Toast.LENGTH_SHORT).show();
+                }
             }
 
         });
 
-        holder.txtPost.setOnClickListener(new View.OnClickListener() {
+         holder.txtPost.setOnClickListener(new  View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                list.get(position).setPostText(list.get(position).getPostText().toString());
+                Log.i("post adapter","Clicked");
+                Log.i("post adapter",list.get(position).getPostText().toString());
+                holder.txtPost.setText(list.get(position).getPostText().toString());
+
             }
 
         });
@@ -281,8 +286,6 @@ public class PostAdapter extends ArrayAdapter<Post> {
         protected TextView txtCategory;
         protected TextView txtSubject;
         protected TextView txtPost;
-        protected TextView txtComment;
-        protected TextView txtCommentBy;
         protected TextView txtHelpFull;
         protected TextView txtNotHelpFull;
         protected TextView txtTimeStamp;
@@ -291,16 +294,19 @@ public class PostAdapter extends ArrayAdapter<Post> {
         protected ImageView catImage;
         protected RelativeLayout topbase;
         protected LinearLayout bottombar;
+        protected ImageButton btnComment;
+        protected TextView txtComment;
     }
 
     public class asyncGetLatestPost extends AsyncTask<String, Void, String> {
         JSONParser jsonParser = new JSONParser();
         int PostId;
         int Flag;
-        public asyncGetLatestPost(int oPostId,int oflag ) {
+
+        public asyncGetLatestPost(int oPostId, int oflag) {
             super();
-            PostId=oPostId;
-            Flag=oflag;
+            PostId = oPostId;
+            Flag = oflag;
         }
 
         @Override
@@ -324,7 +330,7 @@ public class PostAdapter extends ArrayAdapter<Post> {
                 params.add(new BasicNameValuePair("PostId", String.valueOf(PostId)));
                 params.add(new BasicNameValuePair("Flag", String.valueOf(Flag)));
 
-                JSONObject  json = jsonParser.makeHttpRequest(MasterDetails.UpdateHelpFull, "GET", params);
+                JSONObject json = jsonParser.makeHttpRequest(MasterDetails.UpdateHelpFull, "GET", params);
                 Log.i("SplashScreen", "got json");
                 if (json.length() > 0) {
                     // json success tag

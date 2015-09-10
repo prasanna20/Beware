@@ -51,18 +51,17 @@ public class SplashScreen extends AppCompatActivity {
                     }
                     logoTimer = logoTimer + 300;
 
-                };
+                }
+                ;
                 HomeActivity();
             }
         };
 
         //Get Post
-        if(MasterDetails.isOnline(this)) {
+        if (MasterDetails.isOnline(this)) {
             new asyncGetLatestPost().execute();
-        }
-        else
-        {
-            Toast.makeText(this,"Please connect to internet. You Are on offline mode",Toast.LENGTH_LONG).show();
+        } else {
+            Toast.makeText(this, "Please connect to internet. You Are on offline mode", Toast.LENGTH_LONG).show();
         }
 
         SplashScreenTimer.start();
@@ -85,9 +84,6 @@ public class SplashScreen extends AppCompatActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
 
         return super.onOptionsItemSelected(item);
     }
@@ -120,13 +116,13 @@ public class SplashScreen extends AppCompatActivity {
                 ArrayList<UserDetails> objUserDetails = new ArrayList<UserDetails>();
                 objUserDetails = db.getUserDetails();
                 JSONObject json;
-                int PostId=0;
+                int PostId = 0;
 
                 int success;
                 List<NameValuePair> params = new ArrayList<NameValuePair>();
-                PostId=db.getMaxPostId();
+                PostId = db.getMaxPostId();
 
-                Log.i("SplashScreenPostID",String.valueOf(PostId));
+                Log.i("SplashScreenPostID", String.valueOf(PostId));
 
                 params.clear();
                 params.add(new BasicNameValuePair("UserId", String.valueOf(objUserDetails.get(0).getUserId().toString())));
@@ -146,7 +142,7 @@ public class SplashScreen extends AppCompatActivity {
                         for (int i = 0; i < objPostArray.length(); i++) {
 
                             JSONObject obj = objPostArray.getJSONObject(i);
-                            Log.i("SplashScreenSubject",obj.getString("Subject"));
+                            Log.i("SplashScreenSubject", obj.getString("Subject"));
                             Post.setPostId(obj.getInt("PostId"));
                             Post.setHelpFull(obj.getInt("HelpFull"));
                             Post.setNotHelpFull(obj.getInt("NotHelpFull"));

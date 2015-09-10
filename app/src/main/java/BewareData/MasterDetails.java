@@ -3,7 +3,10 @@ package BewareData;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.net.ParseException;
+import android.util.Log;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
 /**
@@ -201,6 +204,32 @@ public class MasterDetails {
             return true;
         }
         return false;
+    }
+
+    public static String formateDateFromstring(String inputFormat, String outputFormat, String inputDate){
+
+        java.util.Date parsed = null;
+        String outputDate = "";
+
+        SimpleDateFormat df_input = new SimpleDateFormat(inputFormat, java.util.Locale.getDefault());
+        SimpleDateFormat df_output = new SimpleDateFormat(outputFormat, java.util.Locale.getDefault());
+
+        try {
+            try {
+                parsed = df_input.parse(inputDate);
+            } catch (java.text.ParseException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+            outputDate = df_output.format(parsed);
+            Log.i("date", outputDate);
+
+        } catch (ParseException e) {
+            Log.i("date", "ParseException - dateFormat");
+        }
+
+        return outputDate;
+
     }
 
 }

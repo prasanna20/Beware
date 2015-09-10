@@ -93,7 +93,6 @@ public class CommentActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayShowCustomEnabled(true);
         getSupportActionBar().setCustomView(R.layout.actionbar_comment);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setLogo(R.drawable.ic_launcher);
         getSupportActionBar().setDisplayUseLogoEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
@@ -225,7 +224,7 @@ public class CommentActivity extends AppCompatActivity {
                             MasterDetails.PostComments, "GET", params);
 
                     int success = json.getInt("success");
-                    DateFormat df = new SimpleDateFormat("EEE, d MMM yyyy, HH:mm");
+                    DateFormat df = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
                     String date = df.format(Calendar.getInstance().getTime());
 
                     if (success == 1) {

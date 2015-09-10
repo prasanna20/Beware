@@ -18,6 +18,7 @@ import com.fyshadows.beware.R;
 import java.util.List;
 
 import BewareData.Comment;
+import BewareData.MasterDetails;
 
 
 /**
@@ -62,7 +63,6 @@ public class CommentsAdapter extends ArrayAdapter<Comment> {
 
             viewHolder.txtComment = (TextView) view.findViewById(R.id.txtComment);
 
-            viewHolder.txtCommentedBy = (TextView) view.findViewById(R.id.txtCommentedBy);
 
             viewHolder.txtTimestamp = (TextView) view.findViewById(R.id.txtTimestamp);
 
@@ -78,13 +78,6 @@ public class CommentsAdapter extends ArrayAdapter<Comment> {
         Log.i("CommentsAdapter", list.get(position).getCommentText().toString());
         Log.i("CommentsAdapter", list.get(position).getTimeStamp().toString());
         if (!list.get(position).toString().trim().equalsIgnoreCase("")) {
-            if(list.get(position).getUserName() != null) {
-                holder.txtCommentedBy.setText(list.get(position).getUserName().toString());
-            }
-            else
-            {
-                holder.txtCommentedBy.setText("Category");
-            }
 
             if(list.get(position).getCommentText() != null) {
                 holder.txtComment.setText(list.get(position).getCommentText().toString());
@@ -95,7 +88,7 @@ public class CommentsAdapter extends ArrayAdapter<Comment> {
             }
 
             if(list.get(position).getTimeStamp() != null) {
-                holder.txtTimestamp.setText(list.get(position).getTimeStamp().toString());
+                holder.txtTimestamp.setText(MasterDetails.formateDateFromstring("yyyy-MM-dd hh:mm:ss", "dd MMM yyyy HH:mm", list.get(position).getTimeStamp().toString()));
             }
             else
             {
@@ -111,7 +104,6 @@ public class CommentsAdapter extends ArrayAdapter<Comment> {
 
     static class ViewHolder {
         protected TextView txtComment;
-        protected TextView txtCommentedBy;
         protected TextView txtTimestamp;
 
     }

@@ -90,6 +90,7 @@ public class Home extends AppCompatActivity {
 
             if (FromScreen.equalsIgnoreCase("MyPost")) {
                 txtactionbar.setText("My Post");
+                getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             } else {
                 txtactionbar.setText("Home");
             }
@@ -103,8 +104,11 @@ public class Home extends AppCompatActivity {
 
 
             list = db.getPostOnCategory(FromScreen);
-
-            adapter = new PostAdapter(this, list);
+            if (FromScreen.equalsIgnoreCase("MyPost")) {
+                adapter = new PostAdapter(Home.this, list, "MyPost");
+            } else {
+                adapter = new PostAdapter(this, list, "Home");
+            }
             listView.setAdapter(adapter);
             adapter.notifyDataSetChanged();
             listView.smoothScrollToPosition(0);
@@ -164,7 +168,7 @@ public class Home extends AppCompatActivity {
                     } catch (SQLException e) {
                         e.printStackTrace();
                     }
-                    adapter = new PostAdapter(Home.this, list);
+                    adapter = new PostAdapter(Home.this, list, "Home");
                     listView.setAdapter(adapter);
                     adapter.notifyDataSetChanged();
                 }
@@ -183,7 +187,7 @@ public class Home extends AppCompatActivity {
                     } catch (SQLException e) {
                         e.printStackTrace();
                     }
-                    adapter = new PostAdapter(Home.this, list);
+                    adapter = new PostAdapter(Home.this, list, "Home");
                     listView.setAdapter(adapter);
                     adapter.notifyDataSetChanged();
                 }
@@ -202,7 +206,7 @@ public class Home extends AppCompatActivity {
                     } catch (SQLException e) {
                         e.printStackTrace();
                     }
-                    adapter = new PostAdapter(Home.this, list);
+                    adapter = new PostAdapter(Home.this, list, "Home");
                     listView.setAdapter(adapter);
                     adapter.notifyDataSetChanged();
                 }
@@ -221,7 +225,7 @@ public class Home extends AppCompatActivity {
                     } catch (SQLException e) {
                         e.printStackTrace();
                     }
-                    adapter = new PostAdapter(Home.this, list);
+                    adapter = new PostAdapter(Home.this, list, "Home");
                     listView.setAdapter(adapter);
                     adapter.notifyDataSetChanged();
                 }
@@ -240,7 +244,7 @@ public class Home extends AppCompatActivity {
                     } catch (SQLException e) {
                         e.printStackTrace();
                     }
-                    adapter = new PostAdapter(Home.this, list);
+                    adapter = new PostAdapter(Home.this, list, "MyPost");
                     listView.setAdapter(adapter);
                     adapter.notifyDataSetChanged();
                 }
@@ -249,7 +253,6 @@ public class Home extends AppCompatActivity {
             e.printStackTrace();
         }
 //End Category selection
-
 
 
         searchbtn = (ImageButton) findViewById(R.id.searchbtn);
@@ -316,7 +319,7 @@ public class Home extends AppCompatActivity {
                 } catch (SQLException e) {
                     e.printStackTrace();
                 }
-                adapter = new PostAdapter(Home.this, list);
+                adapter = new PostAdapter(Home.this, list, "Home");
                 listView.setAdapter(adapter);
                 adapter.notifyDataSetChanged();
         }
