@@ -159,6 +159,7 @@ public class Home extends AppCompatActivity {
             btnCatPlaces.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    btnMenu.setImageResource(R.drawable.menu);
                     getSupportActionBar().setDisplayHomeAsUpEnabled(true);
                     txtactionbar.setText("Places");
                     btnMenu.setImageResource(R.drawable.menu);
@@ -178,6 +179,7 @@ public class Home extends AppCompatActivity {
             btnCatFood.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    btnMenu.setImageResource(R.drawable.menu);
                     getSupportActionBar().setDisplayHomeAsUpEnabled(true);
                     txtactionbar.setText("Food");
                     btnMenu.setImageResource(R.drawable.menu);
@@ -197,6 +199,7 @@ public class Home extends AppCompatActivity {
             btnCatSafety.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    btnMenu.setImageResource(R.drawable.menu);
                     getSupportActionBar().setDisplayHomeAsUpEnabled(true);
                     txtactionbar.setText("Girls Safety");
                     btnMenu.setImageResource(R.drawable.menu);
@@ -216,6 +219,7 @@ public class Home extends AppCompatActivity {
             btnCatOthers.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    btnMenu.setImageResource(R.drawable.menu);
                     getSupportActionBar().setDisplayHomeAsUpEnabled(true);
                     txtactionbar.setText("Others");
                     btnMenu.setImageResource(R.drawable.menu);
