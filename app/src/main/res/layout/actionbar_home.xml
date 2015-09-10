@@ -19,13 +19,14 @@
 
     <ImageButton
         android:id="@+id/searchbtn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
         android:layout_marginRight="10dp"
+        android:scaleType="fitCenter"
         android:background="#00000000"
         android:onClick="GotoFriendlist"
-        android:src="@drawable/send_msg_icon" />
+        android:src="@drawable/actionsearch" />
 
 </RelativeLayout>
