@@ -122,8 +122,8 @@
                     android:layout_height="40dp"
                     android:layout_below="@+id/txtTimeStamp"
                     android:background="#00000000"
-                    android:paddingLeft="10dp"
-                    android:paddingRight="10dp"
+                    android:paddingLeft="5dp"
+                    android:paddingRight="5dp"
                     android:text="HelpFull"
                     android:textAllCaps="false"
                     android:textColor="#ffffff" />
@@ -154,8 +154,8 @@
                     android:layout_alignParentRight="true"
                     android:layout_below="@+id/txtTimeStamp"
                     android:background="#00000000"
-                    android:paddingLeft="10dp"
-                    android:paddingRight="10dp"
+                    android:paddingLeft="5dp"
+                    android:paddingRight="5dp"
                     android:text="Not HelpFull"
                     android:textAllCaps="false"
                     android:textColor="#ffffff" />
