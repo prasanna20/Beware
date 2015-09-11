@@ -51,7 +51,7 @@ public class BewareDatabase extends SQLiteOpenHelper {
 
         myDB.execSQL("CREATE TABLE if not exists bw_UserDetails(UserId varchar(50),UserName varchar(250),EmailId varchar(250),Location varchar(50),GcmId Text,TimeStamp  REAL DEFAULT (datetime('now','localtime'))  );");
 
-        myDB.execSQL("CREATE TABLE if not exists bw_Post(PostId int,UserId  varchar(50),UserName varchar(250),Category varchar(250),Subject varchar(250),PostText Text,HelpFull Int ,NotHelpFull int,TopComment varchar(250),TopCommentUserName varchar(250),TimeStamp  REAL DEFAULT (datetime('now','localtime')) );");
+        myDB.execSQL("CREATE TABLE if not exists bw_Post(PostId int,UserId  varchar(50),UserName varchar(250),Category varchar(250),Subject varchar(250),PostText Text,HelpFull Int ,NotHelpFull int,TopComment varchar(250),TopCommentUserName varchar(250),helpFlag int Default 0 ,TimeStamp  REAL DEFAULT (datetime('now','localtime')) );");
 
     }
 
@@ -215,6 +215,7 @@ public class BewareDatabase extends SQLiteOpenHelper {
         values.put("TopComment", post.getTopComment());
         values.put("TopCommentUserName", post.getTopCommentUserName());
         values.put("TimeStamp", post.getTimeStamp());
+        values.put("helpFlag", 0);
 
         db.insert("bw_Post", null, values);
 
@@ -235,12 +236,12 @@ public class BewareDatabase extends SQLiteOpenHelper {
 
 
         if (Category.equalsIgnoreCase("No")) {
-            selectQuery = "SELECT  PostId,UserId,HelpFull,NotHelpFull,UserName,Category,Subject,PostText,TopComment,TopCommentUserName,TimeStamp from bw_Post  Order By TimeStamp desc";
+            selectQuery = "SELECT  PostId,UserId,HelpFull,NotHelpFull,UserName,Category,Subject,PostText,TopComment,TopCommentUserName,TimeStamp,helpFlag from bw_Post  Order By TimeStamp desc";
 
         } else if (Category.equalsIgnoreCase("MyPost")) {
-            selectQuery = "SELECT  PostId,UserId,HelpFull,NotHelpFull,UserName,Category,Subject,PostText,TopComment,TopCommentUserName,TimeStamp from bw_Post where UserId ='" + GetUserId() + "'  Order By TimeStamp desc";
+            selectQuery = "SELECT  PostId,UserId,HelpFull,NotHelpFull,UserName,Category,Subject,PostText,TopComment,TopCommentUserName,TimeStamp,helpFlag from bw_Post where UserId ='" + GetUserId() + "'  Order By TimeStamp desc";
         } else {
-            selectQuery = "SELECT  PostId,UserId,HelpFull,NotHelpFull,UserName,Category,Subject,PostText,TopComment,TopCommentUserName,TimeStamp from bw_Post where Category='" + Category + "'";
+            selectQuery = "SELECT  PostId,UserId,HelpFull,NotHelpFull,UserName,Category,Subject,PostText,TopComment,TopCommentUserName,TimeStamp,helpFlag from bw_Post where Category='" + Category + "'";
         }
 
         Log.i("BewareDatabase", selectQuery);
@@ -261,6 +262,7 @@ public class BewareDatabase extends SQLiteOpenHelper {
                 objPost.setTopComment(mCursor.getString(mCursor.getColumnIndexOrThrow("TopComment")));
                 objPost.setTopCommentUserName(mCursor.getString(mCursor.getColumnIndexOrThrow("TopCommentUserName")));
                 objPost.setTimeStamp(mCursor.getString(mCursor.getColumnIndexOrThrow("TimeStamp")));
+                objPost.sethelpFlag(mCursor.getInt(mCursor.getColumnIndexOrThrow("helpFlag")));
 
                 Log.i("BewareDatabaseTop", mCursor.getString(mCursor.getColumnIndexOrThrow("TopComment")));
 
@@ -313,10 +315,12 @@ public class BewareDatabase extends SQLiteOpenHelper {
             String sql;
 
             if(HelpFlag==1) {
-                sql = "UPDATE bw_Post  SET HelpFull = HelpFull + 1 where PostId=" + postId;
+                sql = "UPDATE bw_Post  SET HelpFull = HelpFull + 1,helpFlag=1 where PostId=" + postId;
             }else {
-                sql = "UPDATE bw_Post  SET NotHelpFull= NotHelpFull + 1  where PostId=" + postId;
+                sql = "UPDATE bw_Post  SET NotHelpFull= NotHelpFull + 1,helpFlag=2 where PostId=" + postId;
             }
+
+            Log.i("Database",sql);
            db.execSQL(sql);
                 if (db.isOpen()) {
                     db.close();
@@ -325,11 +329,39 @@ public class BewareDatabase extends SQLiteOpenHelper {
 
 
         } catch (Exception e) {
-            Log.i("BewareDatabase", "update vote Failed");
+            Log.i("BewareDatabase", "Insert Failed");
             return false;
         }
 
     }
 
     /* End : Update Helpfull/Not helpfull*/
+
+    /*Start  Update Comment Count */
+    public Boolean UpdateCommentCount(int postId,int Count,int flag) {
+        try {
+            SQLiteDatabase db = this.getWritableDatabase();
+            String sql;
+
+            if(flag==1) {
+                sql = "UPDATE bw_Post SET TopComment = TopComment + 1 where PostId=" + postId;
+            }else {
+                sql = "UPDATE bw_Post SET TopComment= " + Count + " where PostId=" + postId;
+            }
+
+            Log.i("Comment Database",sql);
+            db.execSQL(sql);
+            if (db.isOpen()) {
+                db.close();
+            }
+            return true;
+
+
+        } catch (Exception e) {
+            Log.i("BewareDatabase", "Insert Failed");
+            return false;
+        }
+
+    }
+    /*End Update Comment Count */
 }

@@ -98,6 +98,7 @@ public class CommentActivity extends AppCompatActivity {
 
         TextView txtEmpty = (TextView) findViewById(R.id.txtEmpty);
         if (MasterDetails.isOnline(this)) {
+            txtEmpty.setText("Loading Comments....");
          new AsyncGetComments().execute();
         } else {
             txtEmpty.setVisibility(View.VISIBLE);
@@ -137,7 +138,10 @@ public class CommentActivity extends AppCompatActivity {
                     return;
                 }
 
-                CommentText = edittext_Comment.getText().toString();
+                CommentText=edittext_Comment.getText().toString();
+                CommentText= CommentText.replace("\"", "");
+                CommentText= CommentText.replace("\'", "");
+
                 objUserDetails = new ArrayList<BewareData.UserDetails>();
                 objUserDetails = db.getUserDetails();
                 UserId = objUserDetails.get(0).getUserId();
@@ -220,6 +224,8 @@ public class CommentActivity extends AppCompatActivity {
                     params.add(new BasicNameValuePair("PostId", PostID));
                     params.add(new BasicNameValuePair("Comment", CommentText));
 
+                    db.UpdateCommentCount(Integer.valueOf(PostID),1,1);
+
                     JSONObject json = jsonParser.makeHttpRequest(
                             MasterDetails.PostComments, "GET", params);
 
@@ -228,6 +234,14 @@ public class CommentActivity extends AppCompatActivity {
                     String date = df.format(Calendar.getInstance().getTime());
 
                     if (success == 1) {
+
+                        int CommentCount = json.getInt("CommentCount");
+
+                        if(CommentCount!=0)
+                        {
+                            db.UpdateCommentCount(Integer.valueOf(PostID),CommentCount,2);
+                        }
+
                         Comment objComment = new Comment();
                         objComment.setTimeStamp(String.valueOf(date));
                         objComment.setCommentText(CommentText);
@@ -261,7 +275,6 @@ public class CommentActivity extends AppCompatActivity {
             } else {
                 txtEmpty.setVisibility(View.VISIBLE);
                 txtEmpty.setText("Be the first to comment.");
-
             }
 
         }
@@ -299,9 +312,6 @@ public class CommentActivity extends AppCompatActivity {
 
                         Comment objComment = new Comment();
                         JSONObject obj = CommentObj.getJSONObject(i);
-                        Log.i("CommentActivityUserName", obj.getString("UserName").toString());
-                        Log.i("CommentActivityUserName", obj.getString("Comment").toString());
-                        Log.i("CommentActivityUserName", obj.getString("TimeStamp").toString());
                         objComment.setCommentId(obj.getInt("CommentId"));
                         objComment.setUserName(obj.getString("UserName").toString());
                         objComment.setCommentText(obj.getString("Comment").toString());

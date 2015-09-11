@@ -5,7 +5,7 @@ package BewareData;
  */
 public class Post {
 
-    private int PostId,HelpFull,NotHelpFull;
+    private int PostId,HelpFull,NotHelpFull,helpFlag;
     private String UserId,UserName,Category,Subject,PostText,TopComment,TopCommentUserName,TimeStamp;
 
 
@@ -41,6 +41,10 @@ public class Post {
     public int getNotHelpFull() {return NotHelpFull;}
 
     public void setNotHelpFull(int NotHelpFull) {this.NotHelpFull = NotHelpFull;}
+
+    public int gethelpFlag() {return helpFlag;}
+
+    public void sethelpFlag(int helpFlag) {this.helpFlag = helpFlag;}
 
     public String getUserId() {return UserId;}
 

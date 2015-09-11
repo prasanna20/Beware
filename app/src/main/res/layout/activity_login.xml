@@ -52,7 +52,6 @@
             android:textColorHint="@color/white"
             android:textColor="@color/white"
             android:layout_marginTop="30dp"
-            android:digits="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789 "
             android:hint="Enter your email"
             android:padding="10dp"></EditText>
 

@@ -55,7 +55,6 @@ public class Home extends AppCompatActivity {
 
     String FromScreen = "No";
     Handler handler = new Handler();
-    Handler handler1 = new Handler();
     JSONParser jsonParser;
     TextView txtactionbar;
     ImageButton btnMyPost;
@@ -338,15 +337,7 @@ public class Home extends AppCompatActivity {
             }
         }, 150 * 50);
 
-        handler1.postDelayed(new Runnable() {
 
-            @Override
-            public void run() {
-                Log.i("Home","handler 2 running");
-                adapter.notifyDataSetChanged();
-                handler1.postDelayed(this, 10 * 50);
-            }
-        }, 10 * 50);
 
 
     }
@@ -464,9 +455,7 @@ public class Home extends AppCompatActivity {
                                     adapter.add(Post);
                                 }
                             });
-
-
-                            //End of getting question details
+             //End of getting post details
                         }
                     }
                 }
@@ -491,7 +480,7 @@ public class Home extends AppCompatActivity {
         if (isHandlerRunning) {
             isHandlerRunning=false;
             handler.removeCallbacksAndMessages(null);
-            handler1.removeCallbacksAndMessages(null);
+
             Log.i("Home", "in  resume here" + isHandlerRunning);
         }
     }
@@ -518,15 +507,7 @@ public class Home extends AppCompatActivity {
                 }
             }, 150 * 50);
 
-            handler1.postDelayed(new Runnable() {
 
-                @Override
-                public void run() {
-                    Log.i("Home","handler 2 running");
-                    adapter.notifyDataSetChanged();
-                    handler1.postDelayed(this, 10 * 50);
-                }
-            }, 10 * 50);
         }
 
 
@@ -538,7 +519,7 @@ public class Home extends AppCompatActivity {
         Log.i("Home", "in  Destroy here" + isHandlerRunning);
         if (isHandlerRunning) {
             handler.removeCallbacksAndMessages(null);
-            handler1.removeCallbacksAndMessages(null);
+
         }
     }
 }

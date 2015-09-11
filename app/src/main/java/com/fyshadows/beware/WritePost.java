@@ -98,6 +98,11 @@ public class WritePost extends AppCompatActivity {
                 }
 
 
+                String PostText=editText_PostText.getText().toString();
+                PostText= PostText.replace("\"", "");
+                PostText= PostText.replace("\'", "");
+
+                Log.i("Writetext val",PostText);
 
                 BewareDatabase db=new BewareDatabase(WritePost.this);
 
@@ -105,7 +110,7 @@ public class WritePost extends AppCompatActivity {
                 CreatePost.setUserId(db.GetUserId().toString());
                 CreatePost.setSubject(editText_Subject.getText().toString());
                 CreatePost.setCategory(spinnerCategory.getSelectedItem().toString());
-                CreatePost.setPostText(editText_PostText.getText().toString());
+                CreatePost.setPostText(PostText);
                 CreatePost.setAnonymous(0);
 
 

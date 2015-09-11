@@ -120,6 +120,9 @@ public class SearchActivity extends AppCompatActivity {
                     editText_Search.requestFocus();
                 } else {
                     SearchValue = editText_Search.getText().toString();
+                    SearchValue= SearchValue.replace("\"", "");
+                    SearchValue= SearchValue.replace("\'", "");
+
                     if (MasterDetails.isOnline(SearchActivity.this)) {
                         Log.i("Home", "Executing async");
                         new asyncGetLatestPost().execute();
@@ -177,6 +180,24 @@ public class SearchActivity extends AppCompatActivity {
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            if (HandleRunning) {
+                handler.removeCallbacksAndMessages(null);
+            }
+            Intent i = new Intent(SearchActivity.this, Home.class);
+            i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK
+                    | Intent.FLAG_ACTIVITY_NEW_TASK);
+            Bundle bundle = new Bundle();
+            bundle.putString("FromScreen", "No");
+            i.putExtras(bundle);
+            startActivity(i);
+            return true;
+        }
+        return super.onKeyDown(keyCode, event);
     }
 
     //to check for updates in questions

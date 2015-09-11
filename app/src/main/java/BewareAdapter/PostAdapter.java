@@ -191,7 +191,7 @@ public class PostAdapter extends ArrayAdapter<Post> {
                 holder.catImage.setImageResource(R.drawable.health);
                 holder.topbase.setBackgroundColor(Color.parseColor("#03a9f4"));
                 holder.bottombar.setBackgroundColor(Color.parseColor("#039be5"));
-            } else if (list.get(position).getCategory().toString().equalsIgnoreCase("Girls Safety")) {
+            } else if (list.get(position).getCategory().toString().equalsIgnoreCase("Safety")) {
                 holder.catImage.setImageResource(R.drawable.safety);
                 holder.topbase.setBackgroundColor(Color.parseColor("#26a69a"));
                 holder.bottombar.setBackgroundColor(Color.parseColor("#009688"));
@@ -218,6 +218,24 @@ public class PostAdapter extends ArrayAdapter<Post> {
                 holder.btnNotHelpFull.setEnabled(true);
             }
 
+            //Start : to set helpful flag color
+           if(list.get(position).gethelpFlag()==1 )
+           {
+               holder.btnHelpFull.setBackgroundResource(R.drawable.helpbtnactivebg);
+           }
+            else if (list.get(position).gethelpFlag()==2)
+           {
+               holder.btnNotHelpFull.setBackgroundResource(R.drawable.helpbtnactivebg);
+           }
+            else
+           {
+               holder.btnHelpFull.setBackgroundResource(0);
+               holder.btnNotHelpFull.setBackgroundResource(0);
+           }
+
+            //End : to set helpful flag color
+
+
 
         }
 
@@ -236,18 +254,18 @@ public class PostAdapter extends ArrayAdapter<Post> {
         holder.btnHelpFull.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (MasterDetails.isOnline(getContext())) {
-                    if (!list.get(position).getTopCommentUserName().equalsIgnoreCase("1")) {
-                        list.get(position).setHelpFull(list.get(position).getHelpFull() + 1);
-                        list.get(position).setTopCommentUserName("1");
-
-                        new asyncGetLatestPost(list.get(position).getPostId(), 1).execute();
-                        holder.btnHelpFull.setBackgroundResource(R.drawable.helpbtnactivebg);
+                if (list.get(position).gethelpFlag() != 1 && list.get(position).gethelpFlag() != 2) {
+                    if (MasterDetails.isOnline(getContext())) {
+                        if (!list.get(position).getTopCommentUserName().equalsIgnoreCase("1")) {
+                            list.get(position).setHelpFull(list.get(position).getHelpFull() + 1);
+                            list.get(position).setTopCommentUserName("1");
+                            list.get(position).sethelpFlag(1);
+                            new asyncGetLatestPost(list.get(position).getPostId(), 1).execute();
+                            holder.btnHelpFull.setBackgroundResource(R.drawable.helpbtnactivebg);
+                        }
                     } else {
-                    Toast.makeText(getContext(), "You already voted.", Toast.LENGTH_SHORT).show();
-                }
-                } else {
-                    Toast.makeText(getContext(), "You are on offline mode.", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(), "You are on offline mode.", Toast.LENGTH_SHORT).show();
+                    }
                 }
             }
 
@@ -256,19 +274,21 @@ public class PostAdapter extends ArrayAdapter<Post> {
         holder.btnNotHelpFull.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (MasterDetails.isOnline(getContext())) {
-                    if (!list.get(position).getTopCommentUserName().equalsIgnoreCase("1")) {
-                        list.get(position).setNotHelpFull(list.get(position).getNotHelpFull() + 1);
-                        new asyncGetLatestPost(list.get(position).getPostId(), 2).execute();
-                        list.get(position).setTopCommentUserName("1");
+                if (list.get(position).gethelpFlag() != 1 && list.get(position).gethelpFlag() != 2) {
+                    if (MasterDetails.isOnline(getContext())) {
+                        if (!list.get(position).getTopCommentUserName().equalsIgnoreCase("1")) {
+                            list.get(position).setNotHelpFull(list.get(position).getNotHelpFull() + 1);
+                            new asyncGetLatestPost(list.get(position).getPostId(), 2).execute();
+                            list.get(position).setTopCommentUserName("1");
+                            list.get(position).sethelpFlag(2);
+                            holder.btnNotHelpFull.setBackgroundResource(R.drawable.helpbtnactivebg);
 
-                        holder.btnNotHelpFull.setBackgroundResource(R.drawable.helpbtnactivebg);
-
+                        } else {
+                            Toast.makeText(getContext(), "You already voted.", Toast.LENGTH_SHORT).show();
+                        }
                     } else {
-                        Toast.makeText(getContext(), "You already voted.", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(), "You are on offline mode.", Toast.LENGTH_SHORT).show();
                     }
-                } else {
-                    Toast.makeText(getContext(), "You are on offline mode.", Toast.LENGTH_SHORT).show();
                 }
             }
 

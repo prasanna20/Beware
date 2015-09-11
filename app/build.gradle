@@ -3,7 +3,6 @@ apply plugin: 'com.android.application'
 android {
     compileSdkVersion 22
     buildToolsVersion "22.0.1"
-
     defaultConfig {
         applicationId "com.fyshadows.beware"
         minSdkVersion 15
@@ -16,6 +15,11 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
+        debug {
+            proguardFile 'G:/Software SetUp/Android SDK/adt-bundle-windows-x86-20131030/sdk/tools/proguard/proguard-android.txt'
+        }
+    }
+    productFlavors {
     }
 }
 
