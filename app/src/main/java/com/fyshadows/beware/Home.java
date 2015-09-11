@@ -284,7 +284,7 @@ public class Home extends AppCompatActivity {
                 public void onClick(View v) {
                     getSupportActionBar().setDisplayHomeAsUpEnabled(true);
                     btnMenu.setImageResource(R.drawable.menu);
-                    txtactionbar.setText("My Post");
+                    txtactionbar.setText("My Posts");
                     MenuLayout.setVisibility(View.INVISIBLE);
                     try {
                         list = db.getPostOnCategory("MyPost");

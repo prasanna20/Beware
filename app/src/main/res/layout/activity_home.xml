@@ -25,6 +25,8 @@
                 android:layout_height="wrap_content"
                 android:divider="@null"
                 android:textColor="#000000"
+                android:paddingBottom="15dp"
+                android:clipToPadding="false"
                 android:stackFromBottom="false"/>
 
         </LinearLayout>

@@ -137,7 +137,7 @@ public class PostAdapter extends ArrayAdapter<Post> {
                 {
                     String desc = list.get(position).getPostText().toString().substring(0, 150) + "  Read more...";
                     Spannable WordtoSpan = new SpannableString(desc);
-                    WordtoSpan.setSpan(new ForegroundColorSpan(Color.rgb(248, 186, 20)), 151, 163, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                    WordtoSpan.setSpan(new ForegroundColorSpan(Color.rgb(85, 85, 85)), 151, 163, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
                     holder.txtPost.setText(WordtoSpan);
                 } else {
                     holder.txtPost.setText(list.get(position).getPostText().toString());
@@ -182,15 +182,15 @@ public class PostAdapter extends ArrayAdapter<Post> {
             } else if (list.get(position).getCategory().toString().equalsIgnoreCase("Food")) {
                 holder.catImage.setImageResource(R.drawable.hotels);
                 holder.topbase.setBackgroundColor(Color.parseColor("#ce5250"));
-                holder.bottombar.setBackgroundColor(Color.parseColor("#c94d4d"));
+                holder.bottombar.setBackgroundColor(Color.parseColor("#c24949"));
             } else if (list.get(position).getCategory().toString().equalsIgnoreCase("Health")) {
                 holder.catImage.setImageResource(R.drawable.health);
-                holder.topbase.setBackgroundColor(Color.parseColor("#58bbb8"));
-                holder.bottombar.setBackgroundColor(Color.parseColor("#4fb2af"));
+                holder.topbase.setBackgroundColor(Color.parseColor("#03a9f4"));
+                holder.bottombar.setBackgroundColor(Color.parseColor("#039be5"));
             } else if (list.get(position).getCategory().toString().equalsIgnoreCase("Girls Safety")) {
                 holder.catImage.setImageResource(R.drawable.safety);
-                holder.topbase.setBackgroundColor(Color.parseColor("#e2e02f"));
-                holder.bottombar.setBackgroundColor(Color.parseColor("#cecc26"));
+                holder.topbase.setBackgroundColor(Color.parseColor("#26a69a"));
+                holder.bottombar.setBackgroundColor(Color.parseColor("#009688"));
             } else if (list.get(position).getCategory().toString().equalsIgnoreCase("Company")) {
                 holder.catImage.setImageResource(R.drawable.company);
                 holder.topbase.setBackgroundColor(Color.parseColor("#eea043"));
