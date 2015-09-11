@@ -55,6 +55,7 @@ public class Home extends AppCompatActivity {
 
     String FromScreen = "No";
     Handler handler = new Handler();
+    Handler handler1 = new Handler();
     JSONParser jsonParser;
     TextView txtactionbar;
     ImageButton btnMyPost;
@@ -325,6 +326,7 @@ public class Home extends AppCompatActivity {
             public void run() {
                 isHandlerRunning = true;
                 if (MasterDetails.isOnline(Home.this)) {
+
                     Log.i("Home", "Executing async");
                     new asyncGetLatestPost().execute();
                 } else {
@@ -332,10 +334,19 @@ public class Home extends AppCompatActivity {
                     Toast.makeText(Home.this, "No internet Connection.Please connect to internet..", Toast.LENGTH_LONG).show();
                 }
 
-
                 handler.postDelayed(this, 150 * 50);
             }
         }, 150 * 50);
+
+        handler1.postDelayed(new Runnable() {
+
+            @Override
+            public void run() {
+                Log.i("Home","handler 2 running");
+                adapter.notifyDataSetChanged();
+                handler1.postDelayed(this, 10 * 50);
+            }
+        }, 10 * 50);
 
 
     }
@@ -480,6 +491,7 @@ public class Home extends AppCompatActivity {
         if (isHandlerRunning) {
             isHandlerRunning=false;
             handler.removeCallbacksAndMessages(null);
+            handler1.removeCallbacksAndMessages(null);
             Log.i("Home", "in  resume here" + isHandlerRunning);
         }
     }
@@ -487,7 +499,7 @@ public class Home extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        Log.i("Home", "in  resume here" +  isHandlerRunning);
+        Log.i("Home", "in  resume here" + isHandlerRunning);
         if (!isHandlerRunning) {
             handler.postDelayed(new Runnable() {
 
@@ -502,11 +514,22 @@ public class Home extends AppCompatActivity {
                         Toast.makeText(Home.this, "No internet Connection.Please connect to internet..", Toast.LENGTH_LONG).show();
                     }
 
-
                     handler.postDelayed(this, 150 * 50);
                 }
             }, 150 * 50);
+
+            handler1.postDelayed(new Runnable() {
+
+                @Override
+                public void run() {
+                    Log.i("Home","handler 2 running");
+                    adapter.notifyDataSetChanged();
+                    handler1.postDelayed(this, 10 * 50);
+                }
+            }, 10 * 50);
         }
+
+
     }
 
     @Override
@@ -515,6 +538,7 @@ public class Home extends AppCompatActivity {
         Log.i("Home", "in  Destroy here" + isHandlerRunning);
         if (isHandlerRunning) {
             handler.removeCallbacksAndMessages(null);
+            handler1.removeCallbacksAndMessages(null);
         }
     }
 }

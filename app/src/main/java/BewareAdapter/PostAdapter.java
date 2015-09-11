@@ -240,11 +240,12 @@ public class PostAdapter extends ArrayAdapter<Post> {
                     if (!list.get(position).getTopCommentUserName().equalsIgnoreCase("1")) {
                         list.get(position).setHelpFull(list.get(position).getHelpFull() + 1);
                         list.get(position).setTopCommentUserName("1");
+
                         new asyncGetLatestPost(list.get(position).getPostId(), 1).execute();
 
                     } else {
-                        Toast.makeText(getContext(), "You already voted.", Toast.LENGTH_SHORT).show();
-                    }
+                    Toast.makeText(getContext(), "You already voted.", Toast.LENGTH_SHORT).show();
+                }
                 } else {
                     Toast.makeText(getContext(), "You are on offline mode.", Toast.LENGTH_SHORT).show();
                 }
@@ -259,7 +260,6 @@ public class PostAdapter extends ArrayAdapter<Post> {
                     if (!list.get(position).getTopCommentUserName().equalsIgnoreCase("1")) {
                         list.get(position).setNotHelpFull(list.get(position).getNotHelpFull() + 1);
                         new asyncGetLatestPost(list.get(position).getPostId(), 2).execute();
-                        list.get(position).setTopCommentUserName("1");
                         list.get(position).setTopCommentUserName("1");
                     } else {
                         Toast.makeText(getContext(), "You already voted.", Toast.LENGTH_SHORT).show();
@@ -330,6 +330,13 @@ public class PostAdapter extends ArrayAdapter<Post> {
 
                 params.add(new BasicNameValuePair("PostId", String.valueOf(PostId)));
                 params.add(new BasicNameValuePair("Flag", String.valueOf(Flag)));
+
+                if(Flag==1) {
+                db.UpdateVote(PostId,Flag);
+                }else
+                {
+                 db.UpdateVote(PostId,Flag);
+                }
 
                 JSONObject json = jsonParser.makeHttpRequest(MasterDetails.UpdateHelpFull, "GET", params);
                 Log.i("SplashScreen", "got json");

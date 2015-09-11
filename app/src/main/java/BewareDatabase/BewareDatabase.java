@@ -73,12 +73,6 @@ public class BewareDatabase extends SQLiteOpenHelper {
             values.put("Location", UserDetails.getLocation());
             values.put("GcmId", UserDetails.getGcmId());
 
-            Log.i("DBINSERT", UserDetails.getUserId());
-            Log.i("DBINSERT", UserDetails.getUserName());
-            Log.i("DBINSERT", UserDetails.getEmailId());
-            Log.i("DBINSERT", UserDetails.getLocation());
-            Log.i("DBINSERT", UserDetails.getGcmId());
-
             db.delete("bw_UserDetails", null, null);
             db.insert("bw_UserDetails", null, values);
 
@@ -209,16 +203,6 @@ public class BewareDatabase extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
 
-        Log.i("InsertPost", String.valueOf(post.getPostId()));
-        Log.i("InsertPost", String.valueOf(post.getHelpFull()));
-        Log.i("InsertPost", String.valueOf(post.getNotHelpFull()));
-        Log.i("InsertPost", String.valueOf(post.getUserName()));
-        Log.i("InsertPost", String.valueOf(post.getCategory()));
-        Log.i("InsertPost", String.valueOf(post.getSubject()));
-        Log.i("InsertPost", String.valueOf(post.getPostText()));
-        Log.i("InsertPost", String.valueOf(post.getTopComment()));
-        Log.i("InsertPost", String.valueOf(post.getTopCommentUserName()));
-        Log.i("InsertPost", String.valueOf(post.getTimeStamp()));
 
         values.put("PostId", post.getPostId());
         values.put("UserId", post.getUserId());
@@ -319,5 +303,33 @@ public class BewareDatabase extends SQLiteOpenHelper {
 
     }
 
-/*End :- bw_Post*/
+/*End : bw_Post*/
+
+
+    /* Start : Update Helpfull/Not helpfull*/
+    public Boolean UpdateVote(int postId,int HelpFlag) {
+        try {
+            SQLiteDatabase db = this.getWritableDatabase();
+            String sql;
+
+            if(HelpFlag==1) {
+                sql = "UPDATE bw_Post  SET HelpFull = HelpFull + 1 where PostId=" + postId;
+            }else {
+                sql = "UPDATE bw_Post  SET NotHelpFull= NotHelpFull + 1  where PostId=" + postId;
+            }
+           db.execSQL(sql);
+                if (db.isOpen()) {
+                    db.close();
+                }
+                return true;
+
+
+        } catch (Exception e) {
+            Log.i("BewareDatabase", "update vote Failed");
+            return false;
+        }
+
+    }
+
+    /* End : Update Helpfull/Not helpfull*/
 }
