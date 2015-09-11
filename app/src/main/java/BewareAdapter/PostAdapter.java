@@ -49,14 +49,14 @@ public class PostAdapter extends ArrayAdapter<Post> {
     private static List<Post> list = null;
     private int PostID;
     private String FromActivity;
-
+    private int ReadMorePosition;
 
     public PostAdapter(Activity context,
-                       List<Post> list,String FromActivity) {
+                       List<Post> list, String FromActivity) {
         super(context, R.layout.postrowview, list);
         this.context = context;
         this.list = list;
-        this.FromActivity=FromActivity;
+        this.FromActivity = FromActivity;
     }
 
     @Override
@@ -117,7 +117,6 @@ public class PostAdapter extends ArrayAdapter<Post> {
             viewHolder.btnComment = (ImageButton) view.findViewById(R.id.btnComment);
 
 
-
             view.setTag(viewHolder);
         } else {
             view = convertView;
@@ -133,17 +132,24 @@ public class PostAdapter extends ArrayAdapter<Post> {
 
             if (list.get(position).getPostText() != null) {
                 Log.i("posttext length", String.valueOf(list.get(position).getPostText().toString().length()));
-                if (list.get(position).getPostText().toString().length() > 150)//&& myposition != position
-                {
-                    String desc = list.get(position).getPostText().toString().substring(0, 150) + "  Read more...";
-                    Spannable WordtoSpan = new SpannableString(desc);
-                    WordtoSpan.setSpan(new ForegroundColorSpan(Color.rgb(85, 85, 85)), 151, 163, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-                    holder.txtPost.setText(WordtoSpan);
-                } else {
-                    holder.txtPost.setText(list.get(position).getPostText().toString());
-                }
 
-            } else {
+                    if (list.get(position).getPostText().toString().length() > 150)//&& myposition != position
+                    {
+                        if(ReadMorePosition!=list.get(position).getPostId()) {
+                            String desc = list.get(position).getPostText().toString().substring(0, 150) + "  Read more...";
+                            Spannable WordtoSpan = new SpannableString(desc);
+                            WordtoSpan.setSpan(new ForegroundColorSpan(Color.rgb(85, 85, 85)), 151, 163, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                            holder.txtPost.setText(WordtoSpan);
+                        }
+                        else {
+                            holder.txtPost.setText(list.get(position).getPostText().toString());
+                        }
+                    } else {
+                        holder.txtPost.setText(list.get(position).getPostText().toString());
+                    }
+            }
+
+           else {
                 holder.txtPost.setText("");
             }
 
@@ -165,8 +171,6 @@ public class PostAdapter extends ArrayAdapter<Post> {
             } else {
                 holder.txtComment.setText("0");
             }
-
-
 
 
             holder.txtHelpFull.setText(String.valueOf(list.get(position).getHelpFull()));
@@ -206,13 +210,10 @@ public class PostAdapter extends ArrayAdapter<Post> {
             }
             //End : To set Icon for Category
 
-            if(FromActivity.equalsIgnoreCase("MyPost"))
-            {
+            if (FromActivity.equalsIgnoreCase("MyPost")) {
                 holder.btnHelpFull.setEnabled(false);
                 holder.btnNotHelpFull.setEnabled(false);
-            }
-            else
-            {
+            } else {
                 holder.btnHelpFull.setEnabled(true);
                 holder.btnNotHelpFull.setEnabled(true);
             }
@@ -236,11 +237,12 @@ public class PostAdapter extends ArrayAdapter<Post> {
             @Override
             public void onClick(View view) {
                 if (MasterDetails.isOnline(getContext())) {
-                    if(!list.get(position).getTopCommentUserName().equalsIgnoreCase("1")) {
-                        new asyncGetLatestPost(list.get(position).getPostId(), 1).execute();
+                    if (!list.get(position).getTopCommentUserName().equalsIgnoreCase("1")) {
                         list.get(position).setHelpFull(list.get(position).getHelpFull() + 1);
                         list.get(position).setTopCommentUserName("1");
-                    }else {
+                        new asyncGetLatestPost(list.get(position).getPostId(), 1).execute();
+
+                    } else {
                         Toast.makeText(getContext(), "You already voted.", Toast.LENGTH_SHORT).show();
                     }
                 } else {
@@ -254,12 +256,12 @@ public class PostAdapter extends ArrayAdapter<Post> {
             @Override
             public void onClick(View view) {
                 if (MasterDetails.isOnline(getContext())) {
-                    if(!list.get(position).getTopCommentUserName().equalsIgnoreCase("1")) {
-                    new asyncGetLatestPost(list.get(position).getPostId(), 2).execute();
-                    list.get(position).setNotHelpFull(list.get(position).getNotHelpFull() + 1);
-                    list.get(position).setTopCommentUserName("1");
+                    if (!list.get(position).getTopCommentUserName().equalsIgnoreCase("1")) {
+                        list.get(position).setNotHelpFull(list.get(position).getNotHelpFull() + 1);
+                        new asyncGetLatestPost(list.get(position).getPostId(), 2).execute();
                         list.get(position).setTopCommentUserName("1");
-                    }else {
+                        list.get(position).setTopCommentUserName("1");
+                    } else {
                         Toast.makeText(getContext(), "You already voted.", Toast.LENGTH_SHORT).show();
                     }
                 } else {
@@ -269,12 +271,11 @@ public class PostAdapter extends ArrayAdapter<Post> {
 
         });
 
-         holder.txtPost.setOnClickListener(new  View.OnClickListener() {
+        holder.txtPost.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Log.i("post adapter","Clicked");
-                Log.i("post adapter",list.get(position).getPostText().toString());
                 holder.txtPost.setText(list.get(position).getPostText().toString());
+                ReadMorePosition=list.get(position).getPostId();
 
             }
 

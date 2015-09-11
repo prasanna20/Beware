@@ -167,6 +167,8 @@ public class SearchActivity extends AppCompatActivity {
                     handler.removeCallbacksAndMessages(null);
                 }
                 Intent i = new Intent(SearchActivity.this, Home.class);
+                i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK
+                        | Intent.FLAG_ACTIVITY_NEW_TASK);
                 Bundle bundle = new Bundle();
                 bundle.putString("FromScreen", "No");
                 i.putExtras(bundle);

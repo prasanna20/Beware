@@ -383,7 +383,7 @@ public class Home extends AppCompatActivity {
                 MenuLayout.setVisibility(View.INVISIBLE);
                 return true;
             } else {
-                finish();
+                this.finish();
             }
         }
         return super.onKeyDown(keyCode, event);
@@ -477,6 +477,42 @@ public class Home extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
+        if (isHandlerRunning) {
+            isHandlerRunning=false;
+            handler.removeCallbacksAndMessages(null);
+            Log.i("Home", "in  resume here" + isHandlerRunning);
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Log.i("Home", "in  resume here" +  isHandlerRunning);
+        if (!isHandlerRunning) {
+            handler.postDelayed(new Runnable() {
+
+                @Override
+                public void run() {
+                    isHandlerRunning = true;
+                    if (MasterDetails.isOnline(Home.this)) {
+                        Log.i("Home", "Executing async");
+                        new asyncGetLatestPost().execute();
+                    } else {
+
+                        Toast.makeText(Home.this, "No internet Connection.Please connect to internet..", Toast.LENGTH_LONG).show();
+                    }
+
+
+                    handler.postDelayed(this, 150 * 50);
+                }
+            }, 150 * 50);
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        Log.i("Home", "in  Destroy here" + isHandlerRunning);
         if (isHandlerRunning) {
             handler.removeCallbacksAndMessages(null);
         }
