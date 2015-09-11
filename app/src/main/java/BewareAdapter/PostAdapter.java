@@ -242,7 +242,7 @@ public class PostAdapter extends ArrayAdapter<Post> {
                         list.get(position).setTopCommentUserName("1");
 
                         new asyncGetLatestPost(list.get(position).getPostId(), 1).execute();
-
+                        holder.btnHelpFull.setBackgroundResource(R.drawable.helpbtnactivebg);
                     } else {
                     Toast.makeText(getContext(), "You already voted.", Toast.LENGTH_SHORT).show();
                 }
@@ -261,6 +261,9 @@ public class PostAdapter extends ArrayAdapter<Post> {
                         list.get(position).setNotHelpFull(list.get(position).getNotHelpFull() + 1);
                         new asyncGetLatestPost(list.get(position).getPostId(), 2).execute();
                         list.get(position).setTopCommentUserName("1");
+
+                        holder.btnNotHelpFull.setBackgroundResource(R.drawable.helpbtnactivebg);
+
                     } else {
                         Toast.makeText(getContext(), "You already voted.", Toast.LENGTH_SHORT).show();
                     }
