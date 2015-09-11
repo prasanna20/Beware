@@ -191,7 +191,9 @@ public class MasterDetails {
         Category.add(0,"Places" );
         Category.add(1,"Food" );
         Category.add(2,"Girls Safety" );
-        Category.add(3,"Others");
+        Category.add(3,"Health");
+        Category.add(4,"People");
+        Category.add(5,"Others");
         return  Category;
     }
 

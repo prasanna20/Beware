@@ -1,67 +1,76 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
-    android:layout_height="match_parent" android:paddingLeft="@dimen/activity_horizontal_margin"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:background="#1a1a1a"
     tools:context="com.fyshadows.beware.WritePost">
+
     <Spinner
         android:id="@+id/spinCategory"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_below="@+id/editText_email"
-        android:layout_marginTop="15dp" />
+        android:layout_marginTop="15dp"
+        android:padding="10dp"
+        android:background="@drawable/spinnerbg" />
 
     <EditText
         android:id="@+id/editText_Subject"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
         android:layout_below="@+id/spinCategory"
+        android:layout_marginTop="10dp"
         android:digits="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789 "
         android:hint="Subject"
-        android:padding="10dp"
-        android:maxLength="50">
-    </EditText>
+        android:maxLength="50"
+        android:textColorHint="@color/white"
+        android:textColor="@color/white"
+        android:padding="10dp"></EditText>
 
     <EditText
         android:id="@+id/editText_PostText"
         android:layout_width="match_parent"
         android:layout_height="80dp"
-        android:layout_marginTop="10dp"
+        android:textColorHint="@color/white"
+        android:textColor="@color/white"
         android:layout_below="@+id/editText_Subject"
+        android:layout_marginTop="10dp"
         android:digits="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789. "
         android:hint="Write Your Post"
         android:maxLength="750"
-        android:padding="10dp" >
+        android:padding="10dp">
 
     </EditText>
 
 
- <!--  <CheckBox
-        android:id="@+id/chkBox_anonym"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/editText_PostText"
-        android:text="Post Anonymously"
-        android:textColor="#666666"
-        android:textSize="12sp"/>
--->
+    <!--  <CheckBox
+           android:id="@+id/chkBox_anonym"
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content"
+           android:layout_below="@+id/editText_PostText"
+           android:text="Post Anonymously"
+           android:textColor="#666666"
+           android:textSize="12sp"/>
+   -->
 
     <TextView
         android:id="@+id/txtactionbar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/editText_PostText"
-        android:gravity="center_vertical"
         android:layout_centerHorizontal="true"
-        android:textStyle="bold"
-        android:text="All posts will be ANONYMOUS. We won't reveal your identity."
-        android:paddingTop="10dp"
+        android:gravity="center_vertical"
+        android:textColor="@color/white"
         android:paddingLeft="15dp"
         android:paddingRight="15dp"
-        />
+        android:paddingTop="10dp"
+        android:text="All posts are ANONYMOUS. No where will your identity be revealed ! "
+        android:textStyle="bold" />
 
 
     <Button
@@ -71,10 +80,11 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
         android:layout_marginTop="30dp"
-        android:background="@drawable/buttonbg"
+        android:background="@drawable/buttonbgcreatepost"
         android:padding="10dp"
         android:text="Create Post"
-        android:textStyle="bold"
-        android:textColor="@color/black" />
+        android:textAllCaps="false"
+        android:textColor="@color/white"
+        android:textStyle="bold" />
 
 </RelativeLayout>

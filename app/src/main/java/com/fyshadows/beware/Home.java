@@ -145,6 +145,7 @@ public class Home extends AppCompatActivity {
             btnCreatePost.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    btnMenu.setImageResource(R.drawable.menu);
                     MenuLayout.setVisibility(View.INVISIBLE);
                     Intent i = new Intent(Home.this, WritePost.class);
                     if (isHandlerRunning) {
