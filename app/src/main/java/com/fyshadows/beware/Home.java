@@ -62,6 +62,8 @@ public class Home extends AppCompatActivity {
     ImageButton btnCatFood;
     ImageButton btnCatSafety;
     ImageButton btnCatOthers;
+    ImageButton btnCatHealth;
+    ImageButton btnCatPeople;
     ImageButton searchbtn;
     Boolean isHandlerRunning = false;
 
@@ -226,6 +228,46 @@ public class Home extends AppCompatActivity {
                     MenuLayout.setVisibility(View.INVISIBLE);
                     try {
                         list = db.getPostOnCategory("Others");
+                    } catch (SQLException e) {
+                        e.printStackTrace();
+                    }
+                    adapter = new PostAdapter(Home.this, list, "Home");
+                    listView.setAdapter(adapter);
+                    adapter.notifyDataSetChanged();
+                }
+            });
+
+            btnCatHealth = (ImageButton) findViewById(R.id.btnCatHealth);
+            btnCatHealth.setOnClickListener(new View.OnClickListener() {
+                @Override
+            public void onClick(View v) {
+                    btnMenu.setImageResource(R.drawable.menu);
+                    getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+                    txtactionbar.setText("Health");
+                    btnMenu.setImageResource(R.drawable.menu);
+                    MenuLayout.setVisibility(View.INVISIBLE);
+                    try {
+                        list = db.getPostOnCategory("Health");
+                    } catch (SQLException e) {
+                        e.printStackTrace();
+                    }
+                    adapter = new PostAdapter(Home.this, list, "Home");
+                    listView.setAdapter(adapter);
+                    adapter.notifyDataSetChanged();
+                }
+            });
+
+            btnCatPeople = (ImageButton) findViewById(R.id.btnCatPeople);
+            btnCatPeople.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    btnMenu.setImageResource(R.drawable.menu);
+                    getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+                    txtactionbar.setText("Health");
+                    btnMenu.setImageResource(R.drawable.menu);
+                    MenuLayout.setVisibility(View.INVISIBLE);
+                    try {
+                        list = db.getPostOnCategory("People");
                     } catch (SQLException e) {
                         e.printStackTrace();
                     }
