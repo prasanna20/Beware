@@ -27,7 +27,7 @@
                 android:layout_weight="50"
                 android:hint="Your message"
                 android:inputType="textCapSentences|textMultiLine"
-                android:maxLength="50"
+                android:maxLength="160"
                 android:maxLines="4"
                 android:textColor="@color/white"
                 android:padding="5dp"

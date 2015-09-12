@@ -144,8 +144,6 @@ public class WritePost extends AppCompatActivity {
                      Toast.makeText(WritePost.this,"Post Creation failed",Toast.LENGTH_SHORT).show();
                  }
 
-                } else {
-                    Toast.makeText(WritePost.this, "Please connect to internet", Toast.LENGTH_LONG).show();
                 }
             }
         });

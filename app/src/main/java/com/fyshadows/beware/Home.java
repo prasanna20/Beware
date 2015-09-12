@@ -204,11 +204,11 @@ public class Home extends AppCompatActivity {
                 public void onClick(View v) {
                     btnMenu.setImageResource(R.drawable.menu);
                     getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-                    txtactionbar.setText("Girls Safety");
+                    txtactionbar.setText("Safety");
                     btnMenu.setImageResource(R.drawable.menu);
                     MenuLayout.setVisibility(View.INVISIBLE);
                     try {
-                        list = db.getPostOnCategory("Girls Safety");
+                        list = db.getPostOnCategory("Safety");
                     } catch (SQLException e) {
                         e.printStackTrace();
                     }

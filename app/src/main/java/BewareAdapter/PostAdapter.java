@@ -113,7 +113,6 @@ public class PostAdapter extends ArrayAdapter<Post> {
 
             viewHolder.bottombar = (LinearLayout) view.findViewById(R.id.bottombar);
 
-
             viewHolder.btnComment = (ImageButton) view.findViewById(R.id.btnComment);
 
 
@@ -222,15 +221,17 @@ public class PostAdapter extends ArrayAdapter<Post> {
            if(list.get(position).gethelpFlag()==1 )
            {
                holder.btnHelpFull.setBackgroundResource(R.drawable.helpbtnactivebg);
+               holder.btnNotHelpFull.setBackgroundResource(R.drawable.helpbtnbg);
            }
             else if (list.get(position).gethelpFlag()==2)
            {
                holder.btnNotHelpFull.setBackgroundResource(R.drawable.helpbtnactivebg);
+               holder.btnHelpFull.setBackgroundResource(R.drawable.helpbtnbg);
            }
             else
            {
-               holder.btnHelpFull.setBackgroundResource(0);
-               holder.btnNotHelpFull.setBackgroundResource(0);
+               holder.btnHelpFull.setBackgroundResource(R.drawable.helpbtnbg);
+               holder.btnNotHelpFull.setBackgroundResource(R.drawable.helpbtnbg);
            }
 
             //End : to set helpful flag color

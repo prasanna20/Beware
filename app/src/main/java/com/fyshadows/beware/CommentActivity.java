@@ -103,7 +103,6 @@ public class CommentActivity extends AppCompatActivity {
         } else {
             txtEmpty.setVisibility(View.VISIBLE);
             txtEmpty.setText("No internet Connection.Please connect to internet");
-            Toast.makeText(this, "No internet Connection.Please connect to internet..", Toast.LENGTH_LONG).show();
         }
 
 

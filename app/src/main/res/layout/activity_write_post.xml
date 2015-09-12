@@ -35,12 +35,14 @@
     <EditText
         android:id="@+id/editText_PostText"
         android:layout_width="match_parent"
-        android:layout_height="80dp"
+        android:layout_height="wrap_content"
         android:textColorHint="@color/white"
         android:textColor="@color/white"
         android:layout_below="@+id/editText_Subject"
         android:layout_marginTop="10dp"
         android:hint="Write Your Post"
+        android:inputType="textCapSentences|textMultiLine"
+        android:maxLines="5"
         android:maxLength="750"
         android:padding="10dp">
 
@@ -68,7 +70,7 @@
         android:paddingLeft="15dp"
         android:paddingRight="15dp"
         android:paddingTop="10dp"
-        android:text="All posts are ANONYMOUS. No where will your identity be revealed ! "
+        android:text="All posts are ANONYMOUS. No where your identity be revealed ! "
         android:textStyle="bold" />
 
 
