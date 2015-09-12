@@ -99,7 +99,7 @@ public class CommentActivity extends AppCompatActivity {
         TextView txtEmpty = (TextView) findViewById(R.id.txtEmpty);
         if (MasterDetails.isOnline(this)) {
             txtEmpty.setText("Loading Comments....");
-         new AsyncGetComments().execute();
+            new AsyncGetComments().execute();
         } else {
             txtEmpty.setVisibility(View.VISIBLE);
             txtEmpty.setText("No internet Connection.Please connect to internet");
@@ -137,16 +137,19 @@ public class CommentActivity extends AppCompatActivity {
                     return;
                 }
 
-                CommentText=edittext_Comment.getText().toString();
-                CommentText= CommentText.replace("\"", "");
-                CommentText= CommentText.replace("\'", "");
+                CommentText = edittext_Comment.getText().toString();
+                CommentText = CommentText.replace("\"", "");
+                CommentText = CommentText.replace("\'", "");
 
                 objUserDetails = new ArrayList<BewareData.UserDetails>();
                 objUserDetails = db.getUserDetails();
                 UserId = objUserDetails.get(0).getUserId();
                 UserName = objUserDetails.get(0).getUserName();
-
-                new PostCommentTask().execute();
+                if (MasterDetails.isOnline(CommentActivity.this)) {
+                    new PostCommentTask().execute();
+                } else {
+                    Toast.makeText(CommentActivity.this, "Please connect to internet..", Toast.LENGTH_SHORT).show();
+                }
 
                 edittext_Comment.setText("");
 
@@ -188,8 +191,8 @@ public class CommentActivity extends AppCompatActivity {
         protected String doInBackground(String... urls) {
             if (MasterDetails.isOnline(CommentActivity.this)) {
 
-                  list = getComments();
-                  return null;
+                list = getComments();
+                return null;
             }
             return null;
         }
@@ -200,7 +203,7 @@ public class CommentActivity extends AppCompatActivity {
                 txtEmpty.setVisibility(View.VISIBLE);
                 txtEmpty.setText("Be the first to comment.");
             } else {
-                adapter = new CommentsAdapter(CommentActivity.this  , list);
+                adapter = new CommentsAdapter(CommentActivity.this, list);
                 listView.setAdapter(adapter);
                 txtEmpty.setVisibility(View.INVISIBLE);
             }
@@ -223,7 +226,7 @@ public class CommentActivity extends AppCompatActivity {
                     params.add(new BasicNameValuePair("PostId", PostID));
                     params.add(new BasicNameValuePair("Comment", CommentText));
 
-                    db.UpdateCommentCount(Integer.valueOf(PostID),1,1);
+                    db.UpdateCommentCount(Integer.valueOf(PostID), 1, 1);
 
                     JSONObject json = jsonParser.makeHttpRequest(
                             MasterDetails.PostComments, "GET", params);
@@ -236,9 +239,8 @@ public class CommentActivity extends AppCompatActivity {
 
                         int CommentCount = json.getInt("CommentCount");
 
-                        if(CommentCount!=0)
-                        {
-                            db.UpdateCommentCount(Integer.valueOf(PostID),CommentCount,2);
+                        if (CommentCount != 0) {
+                            db.UpdateCommentCount(Integer.valueOf(PostID), CommentCount, 2);
                         }
 
                         Comment objComment = new Comment();
@@ -268,7 +270,7 @@ public class CommentActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(String result) {
             if (list != null) {
-                adapter = new CommentsAdapter(CommentActivity.this  , list);
+                adapter = new CommentsAdapter(CommentActivity.this, list);
                 listView.setAdapter(adapter);
                 txtEmpty.setVisibility(View.INVISIBLE);
             } else {
@@ -319,8 +321,7 @@ public class CommentActivity extends AppCompatActivity {
                     }
 
 
-                        return list;
-
+                    return list;
 
 
                 }

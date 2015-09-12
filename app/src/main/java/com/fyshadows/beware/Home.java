@@ -328,9 +328,6 @@ public class Home extends AppCompatActivity {
 
                     Log.i("Home", "Executing async");
                     new asyncGetLatestPost().execute();
-                } else {
-
-                    Toast.makeText(Home.this, "No internet Connection.Please connect to internet..", Toast.LENGTH_LONG).show();
                 }
 
                 handler.postDelayed(this, 150 * 50);

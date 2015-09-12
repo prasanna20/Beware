@@ -89,9 +89,6 @@ public class SearchActivity extends AppCompatActivity {
                                 if (MasterDetails.isOnline(SearchActivity.this)) {
                                     Log.i("Home", "Executing async");
                                     new asyncGetLatestPost().execute();
-                                } else {
-
-                                    Toast.makeText(SearchActivity.this, "No internet Connection.Please connect to internet..", Toast.LENGTH_LONG).show();
                                 }
 
 
@@ -128,7 +125,7 @@ public class SearchActivity extends AppCompatActivity {
                         new asyncGetLatestPost().execute();
                     } else {
 
-                        Toast.makeText(SearchActivity.this, "No internet Connection.Please connect to internet..", Toast.LENGTH_LONG).show();
+                        Toast.makeText(SearchActivity.this, "Please connect to internet..", Toast.LENGTH_SHORT).show();
                     }
 
                     Boolean searchFocus = editText_Search.isFocused();
