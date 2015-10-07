@@ -21,6 +21,10 @@ public class MasterDetails {
     public static String GetComments= "http://collegemateapp.com/Beware/GetComments.php";
     public static String PostComments= "http://collegemateapp.com/Beware/PostComment.php";
     public static String UpdateHelpFull= "http://collegemateapp.com/Beware/UpdateHelpFull.php";
+    public static String GetLatestCount ="http://collegemateapp.com/Beware/GetLatestCount.php";
+    public static String GetStateDetails ="http://collegemateapp.com/Beware/GetStateDetails.php";
+    public static String GetDistrictDetails ="http://collegemateapp.com/Beware/GetDistrictDetails.php";
+
 
 
     public ArrayList<String> GetCityDetails()

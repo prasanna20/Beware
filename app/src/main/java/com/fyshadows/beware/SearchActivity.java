@@ -229,7 +229,7 @@ public class SearchActivity extends AppCompatActivity {
 
                 params.clear();
                 params.add(new BasicNameValuePair("UserId", String.valueOf(objUserDetails.get(0).getUserId().toString())));
-                params.add(new BasicNameValuePair("Location", String.valueOf(objUserDetails.get(0).getLocation().toString())));
+                params.add(new BasicNameValuePair("Location", String.valueOf(objUserDetails.get(0).getState().toString())));
                 params.add(new BasicNameValuePair("SearchValue", String.valueOf(SearchValue)));
 
                 json = jsonParser.makeHttpRequest(MasterDetails.GetPolls, "GET", params);

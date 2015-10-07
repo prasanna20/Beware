@@ -14,6 +14,7 @@ import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AbsListView;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ListView;
@@ -40,13 +41,15 @@ import BewareData.MasterDetails;
 import BewareData.Post;
 import BewareData.UserDetails;
 import BewareDatabase.BewareDatabase;
+import BewareListener.RefreshableListView;
 
-public class Home extends AppCompatActivity {
+public class Home extends AppCompatActivity implements RefreshableListView.onListRefreshListener,
+        RefreshableListView.onListLoadMoreListener {
 
     ImageButton btnMenu;
     ImageButton btnCreatePost;
     RelativeLayout MenuLayout;
-    private ListView listView;
+    private RefreshableListView listView;
     ArrayList<Post> PostArray;
     List<Post> list;
     BewareDatabase db;
@@ -66,6 +69,7 @@ public class Home extends AppCompatActivity {
     ImageButton btnCatPeople;
     ImageButton searchbtn;
     Boolean isHandlerRunning = false;
+    ImageButton btnLocation;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -102,10 +106,11 @@ public class Home extends AppCompatActivity {
             PostArray = new ArrayList<Post>();
             list = new ArrayList<Post>();
             txtComment = (TextView) findViewById(R.id.txtComment);
-            listView = (ListView) findViewById(R.id.list);
+            listView = (RefreshableListView) findViewById(R.id.list);
 
 
             list = db.getPostOnCategory(FromScreen);
+            new asyncGetLatestCount(list).execute();
             if (FromScreen.equalsIgnoreCase("MyPost")) {
                 adapter = new PostAdapter(Home.this, list, "MyPost");
             } else {
@@ -113,7 +118,7 @@ public class Home extends AppCompatActivity {
             }
             listView.setAdapter(adapter);
             adapter.notifyDataSetChanged();
-            listView.smoothScrollToPosition(0);
+            // listView.smoothScrollToPosition(0);
 
 
             MenuLayout = (RelativeLayout) findViewById(R.id.top_layout);
@@ -241,7 +246,7 @@ public class Home extends AppCompatActivity {
             btnCatHealth = (ImageButton) findViewById(R.id.btnCatHealth);
             btnCatHealth.setOnClickListener(new View.OnClickListener() {
                 @Override
-            public void onClick(View v) {
+                public void onClick(View v) {
                     btnMenu.setImageResource(R.drawable.menu);
                     getSupportActionBar().setDisplayHomeAsUpEnabled(true);
                     txtactionbar.setText("Health");
@@ -296,6 +301,21 @@ public class Home extends AppCompatActivity {
                     adapter.notifyDataSetChanged();
                 }
             });
+
+            btnLocation = (ImageButton) findViewById(R.id.btnLocation);
+            btnLocation.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent i = new Intent(Home.this, CurrentLocation.class);
+                    if (isHandlerRunning) {
+                        Log.i("home activity", "handler removed");
+
+                        handler.removeCallbacksAndMessages(null);
+                    }
+                    startActivity(i);
+                }
+            });
+
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -319,7 +339,7 @@ public class Home extends AppCompatActivity {
         });
 
 
-        handler.postDelayed(new Runnable() {
+      /*  handler.postDelayed(new Runnable() {
 
             @Override
             public void run() {
@@ -332,9 +352,11 @@ public class Home extends AppCompatActivity {
 
                 handler.postDelayed(this, 150 * 50);
             }
-        }, 150 * 50);
+        }, 150 * 50);*/
 
 
+        listView.setOnListRefreshListener(this);
+        listView.setOnListLoadMoreListener(this);
 
 
     }
@@ -388,6 +410,7 @@ public class Home extends AppCompatActivity {
         return super.onKeyDown(keyCode, event);
     }
 
+
     //to check for updates in questions
     public class asyncGetLatestPost extends AsyncTask<String, Void, String> {
         JSONParser jsonParser = new JSONParser();
@@ -416,7 +439,7 @@ public class Home extends AppCompatActivity {
 
                 params.clear();
                 params.add(new BasicNameValuePair("UserId", String.valueOf(objUserDetails.get(0).getUserId().toString())));
-                params.add(new BasicNameValuePair("Location", String.valueOf(objUserDetails.get(0).getLocation().toString())));
+                params.add(new BasicNameValuePair("Location", String.valueOf(objUserDetails.get(0).getState().toString())));
                 params.add(new BasicNameValuePair("PostId", String.valueOf(PostId)));
 
                 json = jsonParser.makeHttpRequest(MasterDetails.GetPolls, "GET", params);
@@ -452,7 +475,7 @@ public class Home extends AppCompatActivity {
                                     adapter.add(Post);
                                 }
                             });
-             //End of getting post details
+                            //End of getting post details
                         }
                     }
                 }
@@ -468,6 +491,8 @@ public class Home extends AppCompatActivity {
         @Override
         protected void onPostExecute(String result) {
             adapter.notifyDataSetChanged();
+            listView.finishRefresh();
+            listView.finishLoadingMore();
         }
     }
 
@@ -475,7 +500,7 @@ public class Home extends AppCompatActivity {
     protected void onPause() {
         super.onPause();
         if (isHandlerRunning) {
-            isHandlerRunning=false;
+            isHandlerRunning = false;
             handler.removeCallbacksAndMessages(null);
 
             Log.i("Home", "in  resume here" + isHandlerRunning);
@@ -487,7 +512,7 @@ public class Home extends AppCompatActivity {
         super.onResume();
         Log.i("Home", "in  resume here" + isHandlerRunning);
         if (!isHandlerRunning) {
-            handler.postDelayed(new Runnable() {
+         /*   handler.postDelayed(new Runnable() {
 
                 @Override
                 public void run() {
@@ -497,12 +522,12 @@ public class Home extends AppCompatActivity {
                         new asyncGetLatestPost().execute();
                     } else {
 
-                        Toast.makeText(Home.this, "No internet Connection.Please connect to internet..", Toast.LENGTH_LONG).show();
+                        Toast.makeText(Home.this, "Please connect to internet..", Toast.LENGTH_LONG).show();
                     }
 
                     handler.postDelayed(this, 150 * 50);
                 }
-            }, 150 * 50);
+            }, 150 * 50);*/
 
 
         }
@@ -519,4 +544,104 @@ public class Home extends AppCompatActivity {
 
         }
     }
+
+    @Override
+    public void Refresh(RefreshableListView list) {
+        Log.i("Home", "Refresh");
+        if (MasterDetails.isOnline(this)) {
+            new asyncGetLatestPost().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+        } else {
+            Toast.makeText(Home.this, "Please connect to internet..", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    @Override
+    public void LoadMore(RefreshableListView list, int From) {
+        Log.i("Home", "Refresh LoadMore");
+        if (From == 1) {
+            // new asyncGetLatestPost().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+        } else {
+
+        }
+    }
+
+    public class asyncGetLatestCount extends AsyncTask<String, Void, String> {
+        JSONParser jsonParser = new JSONParser();
+        List<Post> ExistingPost;
+
+        public asyncGetLatestCount(List<Post> oPost) {
+            super();
+            ExistingPost = oPost;
+        }
+
+        @Override
+        protected void onPreExecute() {
+
+        }
+
+        @Override
+        protected String doInBackground(String... urls) {
+            try {
+                Log.i("Home async start", "got json");
+                Log.i("Home async size", String.valueOf(ExistingPost.size()));
+                if (ExistingPost.size() > 0) {
+                    for (int i = 0; i < ExistingPost.size(); i++) {
+                        MasterDetails MasterDetails = new MasterDetails();
+                        BewareDatabase db = new BewareDatabase(Home.this);
+
+                        int success;
+                        List<NameValuePair> params = new ArrayList<NameValuePair>();
+
+                        params.clear();
+
+                        params.add(new BasicNameValuePair("PostId", String.valueOf(ExistingPost.get(i).getPostId())));
+
+                        JSONObject json = jsonParser.makeHttpRequest(MasterDetails.GetLatestCount, "GET", params);
+                        Log.i("Home async  Post", "got json");
+                        Log.i("Home async  post id", String.valueOf(ExistingPost.get(i).getPostId()));
+                        if(json != null) {
+                            if (json.length() > 0) {
+                                // json success tag
+                                success = json.getInt("success");
+                                if (success == 1) {
+                                    Log.i("Home async Latest Post", "got json sucesss");
+                                    JSONArray objPostArray = json.getJSONArray("LatestCount"); // JSON
+
+                                    Log.i("Home async Post length", String.valueOf(objPostArray.length()));
+                                    if (objPostArray.length() > 0) {
+                                        // Array
+                                        JSONObject obj = objPostArray.getJSONObject(0);
+                                        list.get(i).setHelpFull(obj.getInt("HelpFull"));
+                                        list.get(i).setNotHelpFull(obj.getInt("NotHelpFull"));
+                                        list.get(i).setTopComment(String.valueOf(obj.getInt("CommentCount")));
+                                        if (i % 5 == 0) {
+                                            runOnUiThread(new Runnable() {
+                                                @Override
+                                                public void run() {
+                                                    adapter.notifyDataSetChanged();
+                                                }
+                                            });
+                                        }
+                                            db.UpdateLatestCount(ExistingPost.get(i).getPostId(), obj.getInt("HelpFull"), obj.getInt("NotHelpFull"), obj.getInt("CommentCount"));
+
+                                    }
+                                    }
+                            }
+                        }
+                    }
+                }
+            } catch (JSONException e) {
+                Log.i("SplashScreen", "Executing Async activity" + e);
+            }
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+
+        }
+    }
+
+
 }

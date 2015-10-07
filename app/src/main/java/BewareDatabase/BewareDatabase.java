@@ -49,7 +49,7 @@ public class BewareDatabase extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase myDB) {
 
-        myDB.execSQL("CREATE TABLE if not exists bw_UserDetails(UserId varchar(50),UserName varchar(250),EmailId varchar(250),Location varchar(50),GcmId Text,TimeStamp  REAL DEFAULT (datetime('now','localtime'))  );");
+        myDB.execSQL("CREATE TABLE if not exists bw_UserDetails(UserId varchar(50),UserName varchar(250),EmailId varchar(250),State varchar(250),District varchar(250),GcmId Text,TimeStamp  REAL DEFAULT (datetime('now','localtime'))  );");
 
         myDB.execSQL("CREATE TABLE if not exists bw_Post(PostId int,UserId  varchar(50),UserName varchar(250),Category varchar(250),Subject varchar(250),PostText Text,HelpFull Int ,NotHelpFull int,TopComment varchar(250),TopCommentUserName varchar(250),helpFlag int Default 0 ,TimeStamp  REAL DEFAULT (datetime('now','localtime')) );");
 
@@ -70,7 +70,8 @@ public class BewareDatabase extends SQLiteOpenHelper {
             values.put("UserId", UserDetails.getUserId());
             values.put("UserName", UserDetails.getUserName());
             values.put("EmailId", UserDetails.getEmailId());
-            values.put("Location", UserDetails.getLocation());
+            values.put("State", UserDetails.getState());
+            values.put("District", UserDetails.getDistrict());
             values.put("GcmId", UserDetails.getGcmId());
 
             db.delete("bw_UserDetails", null, null);
@@ -84,7 +85,8 @@ public class BewareDatabase extends SQLiteOpenHelper {
             params.add(new BasicNameValuePair("UserId", UserDetails.getUserId()));
             params.add(new BasicNameValuePair("UserName", UserDetails.getUserName()));
             params.add(new BasicNameValuePair("EmailId", UserDetails.getEmailId()));
-            params.add(new BasicNameValuePair("Location", UserDetails.getLocation()));
+            params.add(new BasicNameValuePair("State", UserDetails.getState()));
+            params.add(new BasicNameValuePair("District", UserDetails.getDistrict()));
             params.add(new BasicNameValuePair("GcmId", UserDetails.getGcmId()));
             JSONObject json = jsonParser.makeHttpRequest(
                     MasterDetails.registeruser, "GET", params);
@@ -122,7 +124,7 @@ public class BewareDatabase extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         ArrayList<UserDetails> list = new ArrayList<UserDetails>();
 
-        String selectQuery = "select UserId ,UserName ,EmailId ,Location ,GcmId from bw_UserDetails ";
+        String selectQuery = "select UserId ,UserName ,EmailId ,State,District ,GcmId from bw_UserDetails ";
 
         Cursor cursor = db.rawQuery(selectQuery, null);
 
@@ -131,7 +133,8 @@ public class BewareDatabase extends SQLiteOpenHelper {
             int _UserId = cursor.getColumnIndex("UserId");
             int _UserName = cursor.getColumnIndex("UserName");
             int _EmailId = cursor.getColumnIndex("EmailId");
-            int _Location = cursor.getColumnIndex("Location");
+            int _State = cursor.getColumnIndex("State");
+            int _District = cursor.getColumnIndex("District");
             int _GcmId = cursor.getColumnIndex("GcmId");
 
             if (cursor.moveToFirst()) {
@@ -139,10 +142,11 @@ public class BewareDatabase extends SQLiteOpenHelper {
                 String UserId = cursor.getString(_UserId);
                 String UserName = cursor.getString(_UserName);
                 String EmailId = cursor.getString(_EmailId);
-                String Location = cursor.getString(_Location);
+                String State = cursor.getString(_State);
+                String District = cursor.getString(_District);
                 String GcmId = cursor.getString(_GcmId);
 
-                list.add(new UserDetails(UserId, UserName, EmailId, Location, GcmId));
+                list.add(new UserDetails(UserId, UserName, EmailId, State,District, GcmId));
             }
         }
         return list;
@@ -364,4 +368,31 @@ public class BewareDatabase extends SQLiteOpenHelper {
 
     }
     /*End Update Comment Count */
+
+
+    /*Start : Update Helpfull / NotHelpfull /Commnet Count from Db */
+    public Boolean UpdateLatestCount(int postId,int helpFul,int notHelpFul,int topComment) {
+        try {
+            SQLiteDatabase db = this.getWritableDatabase();
+            String sql;
+
+
+            sql = "UPDATE bw_Post SET  HelpFull = " + helpFul + " ,NotHelpFull = "+ notHelpFul +",TopComment = "+ topComment +" where PostId=" + postId;
+
+            Log.i("Comment Database",sql);
+            db.execSQL(sql);
+            if (db.isOpen()) {
+                db.close();
+            }
+            return true;
+
+
+        } catch (Exception e) {
+            Log.i("BewareDatabase", "Insert Failed");
+            return false;
+        }
+
+    }
+
+    /*End : Update Helpfull / NotHelpfull /Commnet Count from Db */
 }

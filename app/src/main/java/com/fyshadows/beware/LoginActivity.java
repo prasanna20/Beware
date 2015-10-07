@@ -2,6 +2,7 @@ package com.fyshadows.beware;
 
 import android.accounts.Account;
 import android.accounts.AccountManager;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -17,6 +18,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -27,13 +29,22 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 
+import org.apache.http.NameValuePair;
+import org.apache.http.message.BasicNameValuePair;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Random;
 
+import BewareData.District;
 import BewareData.MasterDetails;
+import BewareData.Post;
+import BewareData.State;
 import BewareData.UserDetails;
 import BewareDatabase.BewareDatabase;
 
@@ -58,6 +69,14 @@ public class LoginActivity extends AppCompatActivity {
     String regId;
     BewareDatabase db;
     SharedPreferences prefs;
+    ProgressDialog pDialog;
+    private ArrayList<State> stateList;
+    Spinner spinState;
+
+    private ArrayList<District> districtList;
+    Spinner spinDistrict;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,11 +102,33 @@ public class LoginActivity extends AppCompatActivity {
         //GET EditText value
         editText_name= (EditText) findViewById(R.id.editText_name);
         editText_email=(EditText) findViewById(R.id.editText_email);
+
+        //State Spinner
+        spinState = (Spinner) findViewById(R.id.spinState);
+        new GetStateDetails().execute();
+
         //City Spinner
-        spinnerCity = (Spinner) findViewById(R.id.spinCity);
-        CityList = new ArrayList<String>();
-        CityList= MasterDetails.GetCityDetails();
-        populateCitySpinner();
+        spinDistrict = (Spinner) findViewById(R.id.spinDistrict);
+        districtList = new ArrayList<District>();
+        populateDistrictSpinner();
+
+
+        spinState.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent,
+                                       View view, int position, long id) {
+                String selectedState = spinState.getSelectedItem().toString();
+                Log.i("college selected", selectedState);
+                if (!selectedState.equalsIgnoreCase("--Select State--")) {
+                    new GetDistrictDetails(selectedState).execute();
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+            }
+        });
+
 
         //Email
         emailRegistered = getEmail(this);
@@ -122,17 +163,25 @@ public class LoginActivity extends AppCompatActivity {
                     return;
                 }
 
-                if(spinnerCity.getSelectedItem().toString().equals("--Select City--")  )
+                if(spinState.getSelectedItem().toString().equals("--Select State--")  )
                 {
-                    spinnerCity.requestFocus();
-                    Toast.makeText(LoginActivity.this, "Please Select City", Toast.LENGTH_SHORT).show();
+                    spinState.requestFocus();
+                    Toast.makeText(LoginActivity.this, "Please Select State", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                if(spinDistrict.getSelectedItem().toString().equals("--Select District--")  )
+                {
+                    spinDistrict.requestFocus();
+                    Toast.makeText(LoginActivity.this, "Please Select District", Toast.LENGTH_SHORT).show();
                     return;
                 }
 
                 UserDetails UserDetails = new UserDetails();
                 UserDetails.setUserName(editText_name.getText().toString());
                 UserDetails.setEmailId(editText_email.getText().toString());
-                UserDetails.setLocation(spinnerCity.getSelectedItem().toString());
+                UserDetails.setState(spinState.getSelectedItem().toString());
+                UserDetails.setDistrict(spinDistrict.getSelectedItem().toString());
                 UserId = emailRegistered.substring(0, 5) + String.valueOf(myRandom.nextInt()).substring(0, 4) + String.valueOf(TimeValue);
                 UserDetails.setUserId(UserId);
                 UserDetails.setGcmId(regId);
@@ -323,4 +372,190 @@ public class LoginActivity extends AppCompatActivity {
                 | Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(i);
     }
+
+    //Start :  Load spinner data for State
+
+    private class GetStateDetails extends AsyncTask<Void, Void, Void> {
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            pDialog = new ProgressDialog(LoginActivity.this);
+            pDialog.setMessage("Fetching State..");
+            // pDialog.setCancelable(false);
+           pDialog.show();
+
+        }
+
+        @Override
+        protected Void doInBackground(Void... arg0) {
+            int success;
+            JSONParser jsonParser = new JSONParser();
+            List<NameValuePair> params = new ArrayList<NameValuePair>();
+            stateList = new ArrayList<State>();
+            params.clear();
+            try {
+                JSONObject json = jsonParser.makeHttpRequest(MasterDetails.GetStateDetails, "GET", params );
+
+                    if (json != null) {
+                        if (json.length() > 0) {
+                            // json success tag
+                            success = json.getInt("success");
+                            if (success == 1) {
+
+                                JSONArray stateDetails = json
+                                        .getJSONArray("StateDetails");
+
+
+                                for (int i = 0; i < stateDetails.length(); i++) {
+                                    JSONObject objState = (JSONObject) stateDetails.get(i);
+                                    State state = new State(
+                                            objState.getString("Name"),
+                                            objState.getString("Value")
+                                    );
+                                    stateList.add(state);
+
+                                }
+
+                            }
+                        }
+
+                    } else {
+                        Log.e("JSON Data", "Didn't receive any data from server!");
+                    }
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void result) {
+            super.onPostExecute(result);
+            populateStateSpinner();
+            pDialog.dismiss();
+        }
+
+    }
+
+
+    private void populateStateSpinner() {
+        List<String> lables = new ArrayList<String>();
+        lables.add("--Select State--");
+        for (int i = 0; i < stateList.size(); i++) {
+            lables.add(stateList.get(i).getLabel());
+        }
+
+        // Creating adapter for spinner
+        ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<String>(this,
+                android.R.layout.simple_spinner_item, lables);
+
+        // Drop down layout style - list view with radio button
+        spinnerAdapter
+                .setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+        // attaching data adapter to spinner
+        spinState.setAdapter(spinnerAdapter);
+    }
+
+    //End :  Load spinner data for State
+
+
+//Start :  Load spinner data for District
+
+    private class GetDistrictDetails extends AsyncTask<Void, Void, Void> {
+
+        String selectedState;
+
+
+        public GetDistrictDetails(String selectedStateParam) {
+            super();
+            selectedState = selectedStateParam ;
+            selectedState= '"' + selectedState + '"';
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            pDialog = new ProgressDialog(LoginActivity.this);
+            pDialog.setMessage("Fetching District..");
+            // pDialog.setCancelable(false);
+            pDialog.show();
+
+        }
+
+        @Override
+        protected Void doInBackground(Void... arg0) {
+            int success;
+            districtList = new ArrayList<District>();
+            JSONParser jsonParser = new JSONParser();
+            List<NameValuePair> params = new ArrayList<NameValuePair>();
+            params.clear();
+            Log.i("selectedState",selectedState);
+            params.add(new BasicNameValuePair("State", String.valueOf(selectedState)));
+
+            JSONObject json = jsonParser.makeHttpRequest(MasterDetails.GetDistrictDetails, "GET", params);
+            try {
+            if(json != null) {
+                if (json.length() > 0) {
+                    // json success tag
+                    success = json.getInt("success");
+                    if (success == 1) {
+                        JSONArray districtDetails = json
+                                .getJSONArray("DistrictDetails");
+
+                        for (int i = 0; i < districtDetails.length(); i++) {
+                            JSONObject objDistrict = (JSONObject) districtDetails.get(i);
+                            District district = new District(
+                                    objDistrict.getString("Name"),
+                                    objDistrict.getString("Value")
+                            );
+                            districtList.add(district);
+                        }
+                    }
+                }
+            else {
+                        Log.e("JSON Data", "Didn't receive any data from server!");
+                    }
+
+            }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void result) {
+            super.onPostExecute(result);
+            populateDistrictSpinner();
+            pDialog.dismiss();
+        }
+
+    }
+
+
+    private void populateDistrictSpinner() {
+        List<String> lables = new ArrayList<String>();
+        lables.add("--Select District--");
+        if(districtList != null) {
+            for (int i = 0; i < districtList.size(); i++) {
+                lables.add(districtList.get(i).getLabel());
+            }
+        }
+
+        // Creating adapter for spinner
+        ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<String>(this,
+                android.R.layout.simple_spinner_item, lables);
+
+        // Drop down layout style - list view with radio button
+        spinnerAdapter
+                .setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+        // attaching data adapter to spinner
+        spinDistrict.setAdapter(spinnerAdapter);
+    }
+
+    //End :  Load spinner data for District
 }

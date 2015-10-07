@@ -11,6 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+
         <LinearLayout
             style="@android:style/ButtonBar"
             android:layout_width="wrap_content"
@@ -19,7 +20,7 @@
             android:background="#1a1a1a"
             android:orientation="vertical">
 
-            <ListView
+            <BewareListener.RefreshableListView
                 android:id="@+id/list"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"

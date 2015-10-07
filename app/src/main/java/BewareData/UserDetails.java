@@ -8,15 +8,16 @@ public class UserDetails {
     public UserDetails() {
     }
 
-    private String  UserId,  UserName,  EmailId,  Location,  GcmId;
+    private String  UserId,  UserName,  EmailId ,State ,District ,GcmId;
 
-    public UserDetails(String UserId, String UserName, String EmailId, String Location, String GcmId)
+    public UserDetails(String UserId, String UserName, String EmailId, String State,String District, String GcmId)
     {
         super();
         this.UserId=UserId;
         this.UserName=UserName;
         this.EmailId=EmailId;
-        this.Location=Location;
+        this.State=State;
+        this.District=District;
         this.GcmId=GcmId;
 
     }
@@ -33,9 +34,13 @@ public class UserDetails {
 
     public void setEmailId(String EmailId) {this.EmailId = EmailId;}
 
-    public String getLocation() {return Location;}
+    public String getState() {return State;}
 
-    public void setLocation(String Location) {this.Location = Location;}
+    public void setState(String State) {this.State = State;}
+
+    public String getDistrict() {return District;}
+
+    public void setDistrict(String District) {this.District = District;}
 
     public String getGcmId() {return GcmId;}
 

@@ -261,7 +261,8 @@ public class PostAdapter extends ArrayAdapter<Post> {
                             list.get(position).setHelpFull(list.get(position).getHelpFull() + 1);
                             list.get(position).setTopCommentUserName("1");
                             list.get(position).sethelpFlag(1);
-                            new asyncGetLatestPost(list.get(position).getPostId(), 1).execute();
+                            notifyDataSetChanged();
+                            new asyncPostHelpFulFlag(list.get(position).getPostId(), 1).execute();
                             holder.btnHelpFull.setBackgroundResource(R.drawable.helpbtnactivebg);
                         }
                     } else {
@@ -279,7 +280,8 @@ public class PostAdapter extends ArrayAdapter<Post> {
                     if (MasterDetails.isOnline(getContext())) {
                         if (!list.get(position).getTopCommentUserName().equalsIgnoreCase("1")) {
                             list.get(position).setNotHelpFull(list.get(position).getNotHelpFull() + 1);
-                            new asyncGetLatestPost(list.get(position).getPostId(), 2).execute();
+                            new asyncPostHelpFulFlag(list.get(position).getPostId(), 2).execute();
+                            notifyDataSetChanged();
                             list.get(position).setTopCommentUserName("1");
                             list.get(position).sethelpFlag(2);
                             holder.btnNotHelpFull.setBackgroundResource(R.drawable.helpbtnactivebg);
@@ -323,12 +325,12 @@ public class PostAdapter extends ArrayAdapter<Post> {
         protected TextView txtComment;
     }
 
-    public class asyncGetLatestPost extends AsyncTask<String, Void, String> {
+    public class asyncPostHelpFulFlag extends AsyncTask<String, Void, String> {
         JSONParser jsonParser = new JSONParser();
         int PostId;
         int Flag;
 
-        public asyncGetLatestPost(int oPostId, int oflag) {
+        public asyncPostHelpFulFlag(int oPostId, int oflag) {
             super();
             PostId = oPostId;
             Flag = oflag;

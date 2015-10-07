@@ -59,14 +59,24 @@
             android:layout_width="32dp"
             android:layout_height="32dp"
             android:layout_marginTop="5dp"
-            android:layout_alignTop="@+id/spinCity"
+            android:layout_alignTop="@+id/spinState"
             android:src="@drawable/ic_locpin"/>
 
         <Spinner
-            android:id="@+id/spinCity"
+            android:id="@+id/spinState"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/editText_email"
+            android:layout_marginTop="30dp"
+            android:layout_marginLeft="35dp"
+            android:background="@drawable/spinnerbg"
+            android:padding="10dp"/>
+
+        <Spinner
+            android:id="@+id/spinDistrict"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/spinState"
             android:layout_marginTop="30dp"
             android:layout_marginLeft="35dp"
             android:background="@drawable/spinnerbg"

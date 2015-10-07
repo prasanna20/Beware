@@ -16,6 +16,16 @@
         android:paddingRight="15dp"
         />
 
+    <ImageButton
+        android:id="@+id/btnLocation"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_toLeftOf="@+id/searchbtn"
+
+        android:layout_centerVertical="true"
+        android:layout_marginRight="10dp"
+        android:background="#00000000"
+        android:src="@drawable/actionsearch" />
 
     <ImageButton
         android:id="@+id/searchbtn"
