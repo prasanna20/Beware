@@ -60,6 +60,7 @@ public class Home extends AppCompatActivity implements RefreshableListView.onLis
     Handler handler = new Handler();
     JSONParser jsonParser;
     TextView txtactionbar;
+    TextView txtLoading;
     ImageButton btnMyPost;
     ImageButton btnCatPlaces;
     ImageButton btnCatFood;
@@ -88,7 +89,7 @@ public class Home extends AppCompatActivity implements RefreshableListView.onLis
 
 
             txtactionbar = (TextView) findViewById(R.id.txtactionbar);
-
+            txtLoading = (TextView) findViewById(R.id.txtLoading);
 
             Bundle bundle = getIntent().getExtras();
             FromScreen = String.valueOf(bundle.getString("FromScreen"));
@@ -110,17 +111,71 @@ public class Home extends AppCompatActivity implements RefreshableListView.onLis
 
 
             list = db.getPostOnCategory(FromScreen);
-            new asyncGetLatestCount(list).execute();
-            if (FromScreen.equalsIgnoreCase("MyPost")) {
-                adapter = new PostAdapter(Home.this, list, "MyPost");
-            } else {
-                adapter = new PostAdapter(this, list, "Home");
+            if(list != null)
+            {
+                if(list.size() > 0)
+                {
+                    txtLoading.setVisibility(View.GONE);
+                }
             }
-            listView.setAdapter(adapter);
-            adapter.notifyDataSetChanged();
+            if (FromScreen.equalsIgnoreCase("No")) {
+                    new asyncGetLatestCount(list).execute();
+            }
+
+            if (FromScreen.equalsIgnoreCase("MyPost")) {
+                Log.i("mypost","in here");
+                if(list != null) {
+                if(list.size()> 0 )
+                {
+                    Log.i("mypost","in here 1");
+                    txtLoading.setVisibility(View.GONE);
+                    adapter = new PostAdapter(Home.this, list, "MyPost");
+                    listView.setAdapter(adapter);
+                    adapter.notifyDataSetChanged();
+                }
+                    else
+                {
+                    Log.i("mypost","in here 2");
+                    txtLoading.setVisibility(View.VISIBLE);
+                    txtLoading.setText("Write Your First Post...");
+                }
+                }
+                else
+                {
+                    Log.i("mypost","in here 3");
+                    txtLoading.setVisibility(View.VISIBLE);
+                    txtLoading.setText("Write Your First Post...");
+                }
+
+            } else {
+
+                if(list != null) {
+                    if(list.size()> 0 )
+                    {
+                        Log.i("mypost", "in here 1");
+                        txtLoading.setVisibility(View.GONE);
+                    }
+                    else
+                    {
+                        Log.i("mypost","in here 2");
+                        txtLoading.setVisibility(View.VISIBLE);
+                        txtLoading.setText("Write Your First Post...");
+                    }
+                }
+                else
+                {
+                    Log.i("mypost","in here 3");
+                    txtLoading.setVisibility(View.VISIBLE);
+                    txtLoading.setText("Write Your First Post...");
+                }
+
+                Log.i("mypost","in here 4");
+                adapter = new PostAdapter(Home.this, list, "Home");
+                listView.setAdapter(adapter);
+                adapter.notifyDataSetChanged();
+            }
+
             // listView.smoothScrollToPosition(0);
-
-
             MenuLayout = (RelativeLayout) findViewById(R.id.top_layout);
             MenuLayout.setVisibility(View.INVISIBLE);
 
@@ -297,12 +352,31 @@ public class Home extends AppCompatActivity implements RefreshableListView.onLis
                         e.printStackTrace();
                     }
                     adapter = new PostAdapter(Home.this, list, "MyPost");
+                    if(list != null) {
+                        if(list.size()> 0 )
+                        {
+                            Log.i("mypost","in here 1");
+                            txtLoading.setVisibility(View.GONE);
+                        }
+                        else
+                        {
+                            Log.i("mypost","in here 2");
+                            txtLoading.setVisibility(View.VISIBLE);
+                            txtLoading.setText("Write Your First Post...");
+                        }
+                    }
+                    else
+                    {
+                        Log.i("mypost","in here 3");
+                        txtLoading.setVisibility(View.VISIBLE);
+                        txtLoading.setText("Write Your First Post...");
+                    }
                     listView.setAdapter(adapter);
                     adapter.notifyDataSetChanged();
                 }
             });
 
-            btnLocation = (ImageButton) findViewById(R.id.btnLocation);
+         /*   btnLocation = (ImageButton) findViewById(R.id.btnLocation);
             btnLocation.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -314,7 +388,7 @@ public class Home extends AppCompatActivity implements RefreshableListView.onLis
                     }
                     startActivity(i);
                 }
-            });
+            });*/
 
         } catch (SQLException e) {
             e.printStackTrace();
@@ -411,7 +485,7 @@ public class Home extends AppCompatActivity implements RefreshableListView.onLis
     }
 
 
-    //to check for updates in questions
+    //to check for updates in post
     public class asyncGetLatestPost extends AsyncTask<String, Void, String> {
         JSONParser jsonParser = new JSONParser();
 
@@ -472,7 +546,8 @@ public class Home extends AppCompatActivity implements RefreshableListView.onLis
                             runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
-                                    adapter.add(Post);
+                                    list.add(0,Post);
+
                                 }
                             });
                             //End of getting post details
@@ -510,6 +585,7 @@ public class Home extends AppCompatActivity implements RefreshableListView.onLis
     @Override
     protected void onResume() {
         super.onResume();
+        Log.i("From screen resume", FromScreen);
         Log.i("Home", "in  resume here" + isHandlerRunning);
         if (!isHandlerRunning) {
          /*   handler.postDelayed(new Runnable() {
@@ -585,58 +661,62 @@ public class Home extends AppCompatActivity implements RefreshableListView.onLis
                 Log.i("Home async start", "got json");
                 Log.i("Home async size", String.valueOf(ExistingPost.size()));
                 if (ExistingPost.size() > 0) {
-                    for (int i = 0; i < ExistingPost.size(); i++) {
-                        MasterDetails MasterDetails = new MasterDetails();
-                        BewareDatabase db = new BewareDatabase(Home.this);
 
-                        int success;
-                        List<NameValuePair> params = new ArrayList<NameValuePair>();
+                    MasterDetails MasterDetails = new MasterDetails();
+                    BewareDatabase db = new BewareDatabase(Home.this);
 
-                        params.clear();
+                    int success;
+                    List<NameValuePair> params = new ArrayList<NameValuePair>();
 
-                        params.add(new BasicNameValuePair("PostId", String.valueOf(ExistingPost.get(i).getPostId())));
+                    params.clear();
 
-                        JSONObject json = jsonParser.makeHttpRequest(MasterDetails.GetLatestCount, "GET", params);
-                        Log.i("Home async  Post", "got json");
-                        Log.i("Home async  post id", String.valueOf(ExistingPost.get(i).getPostId()));
-                        if(json != null) {
-                            if (json.length() > 0) {
-                                // json success tag
-                                success = json.getInt("success");
-                                if (success == 1) {
-                                    Log.i("Home async Latest Post", "got json sucesss");
-                                    JSONArray objPostArray = json.getJSONArray("LatestCount"); // JSON
+                    params.add(new BasicNameValuePair("PostId", String.valueOf(ExistingPost.get(ExistingPost.size()-1).getPostId())));
 
-                                    Log.i("Home async Post length", String.valueOf(objPostArray.length()));
+                    JSONObject json = jsonParser.makeHttpRequest(MasterDetails.GetLatestCount, "GET", params);
+                    Log.i("Home async  Post", "got json:"+ExistingPost.get(ExistingPost.size()-1).getPostId());
+                    if(json != null) {
+                        if (json.length() > 0) {
+                            // json success tag
+                            success = json.getInt("success");
+                            if (success == 1) {
+                                Log.i("Home async Latest Post", "got json sucesss");
+                                JSONArray objPostArray = json.getJSONArray("LatestCount"); // JSON
+
+                                Log.i("Home async Post length", String.valueOf(objPostArray.length()));
+                                if(objPostArray != null) {
                                     if (objPostArray.length() > 0) {
                                         // Array
-                                        JSONObject obj = objPostArray.getJSONObject(0);
-                                        list.get(i).setHelpFull(obj.getInt("HelpFull"));
-                                        list.get(i).setNotHelpFull(obj.getInt("NotHelpFull"));
-                                        list.get(i).setTopComment(String.valueOf(obj.getInt("CommentCount")));
-                                        if (i % 5 == 0) {
-                                            runOnUiThread(new Runnable() {
-                                                @Override
-                                                public void run() {
-                                                    adapter.notifyDataSetChanged();
+                                        for (int i = 0; i < objPostArray.length(); i++) {
+                                            JSONObject obj = objPostArray.getJSONObject(i);
+                                            for (int j = 0; j < list.size(); j++) {
+                                                if (list.get(j).getPostId() == obj.getInt("PostId")) {
+                                                    list.get(j).setHelpFull(obj.getInt("HelpFull"));
+                                                    list.get(j).setNotHelpFull(obj.getInt("NotHelpFull"));
+                                                    list.get(j).setTopComment(String.valueOf(obj.getInt("CommentCount")));
+                                                    runOnUiThread(new Runnable() {
+                                                        @Override
+                                                        public void run() {
+                                                            adapter.notifyDataSetChanged();
+                                                        }
+                                                    });
+                                                    db.UpdateLatestCount(list.get(j).getPostId(), obj.getInt("HelpFull"), obj.getInt("NotHelpFull"), obj.getInt("CommentCount"));
                                                 }
-                                            });
-                                        }
-                                            db.UpdateLatestCount(ExistingPost.get(i).getPostId(), obj.getInt("HelpFull"), obj.getInt("NotHelpFull"), obj.getInt("CommentCount"));
+                                            }
 
+                                        }
                                     }
-                                    }
+                                }
                             }
                         }
                     }
                 }
+
             } catch (JSONException e) {
-                Log.i("SplashScreen", "Executing Async activity" + e);
+                Log.i("Home", "Executing Async activity" + e);
             }
 
             return null;
         }
-
         @Override
         protected void onPostExecute(String result) {
 

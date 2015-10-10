@@ -16,7 +16,8 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
         debug {
-            proguardFile 'G:/Software SetUp/Android SDK/adt-bundle-windows-x86-20131030/sdk/tools/proguard/proguard-android.txt'
+            proguardFile 'H:/MyApps/Beware/AppSourceCode/Beware/app/proguard-android.txt'
+            minifyEnabled true
         }
     }
     productFlavors {

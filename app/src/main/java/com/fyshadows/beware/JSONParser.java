@@ -1,5 +1,6 @@
 package com.fyshadows.beware;
 
+import android.os.StrictMode;
 import android.util.Log;
 
 import org.apache.http.HttpEntity;
@@ -37,6 +38,12 @@ public class JSONParser {
     // by making HTTP POST or GET mehtod
     public JSONObject makeHttpRequest(String url, String method,
             List<NameValuePair> params) {
+
+        if (android.os.Build.VERSION.SDK_INT > 9)
+        {
+            StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+            StrictMode.setThreadPolicy(policy);
+        }
  
         // Making HTTP request
         try {

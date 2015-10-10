@@ -388,7 +388,7 @@ public class BewareDatabase extends SQLiteOpenHelper {
 
 
         } catch (Exception e) {
-            Log.i("BewareDatabase", "Insert Failed");
+            Log.i("BewareDatabase", "Update Failed");
             return false;
         }
 

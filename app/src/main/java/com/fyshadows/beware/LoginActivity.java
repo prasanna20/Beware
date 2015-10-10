@@ -83,6 +83,8 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
+        pDialog = new ProgressDialog(LoginActivity.this);
+
         if (android.os.Build.VERSION.SDK_INT > 9) {
             StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder()
                     .permitAll().build();
@@ -93,19 +95,24 @@ public class LoginActivity extends AppCompatActivity {
 
         //Check for first time activity
         if (prefs.getBoolean("Firsttimeactivity", false)) {
-            {
+
                 // This block is used for the already installed activity
                 SplashScreenActivity();
-            }
+
+        }
+        else
+        {
+
+            new GetStateDetails().execute();
         }
 
         //GET EditText value
+        spinState = (Spinner) findViewById(R.id.spinState);
         editText_name= (EditText) findViewById(R.id.editText_name);
         editText_email=(EditText) findViewById(R.id.editText_email);
 
         //State Spinner
-        spinState = (Spinner) findViewById(R.id.spinState);
-        new GetStateDetails().execute();
+
 
         //City Spinner
         spinDistrict = (Spinner) findViewById(R.id.spinDistrict);
@@ -380,7 +387,7 @@ public class LoginActivity extends AppCompatActivity {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            pDialog = new ProgressDialog(LoginActivity.this);
+
             pDialog.setMessage("Fetching State..");
             // pDialog.setCancelable(false);
            pDialog.show();

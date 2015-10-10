@@ -131,33 +131,35 @@ public class SplashScreen extends AppCompatActivity {
 
                 json = jsonParser.makeHttpRequest(MasterDetails.GetPolls, "GET", params);
                 Log.i("SplashScreen", "got json");
-                if (json.length() > 0) {
-                    // json success tag
-                    success = json.getInt("success");
-                    if (success == 1) {
-                        Log.i("SplashScreen", "Success");
-                        // successfully received product details
-                        JSONArray objPostArray = json.getJSONArray("Post"); // JSON
-                        // Array
-                        for (int i = 0; i < objPostArray.length(); i++) {
+                if(json != null) {
+                    if (json.length() > 0) {
+                        // json success tag
+                        success = json.getInt("success");
+                        if (success == 1) {
+                            Log.i("SplashScreen", "Success");
+                            // successfully received product details
+                            JSONArray objPostArray = json.getJSONArray("Post"); // JSON
+                            // Array
+                            for (int i = 0; i < objPostArray.length(); i++) {
 
-                            JSONObject obj = objPostArray.getJSONObject(i);
-                            Log.i("SplashScreenSubject", obj.getString("Subject"));
-                            Post.setPostId(obj.getInt("PostId"));
-                            Post.setHelpFull(obj.getInt("HelpFull"));
-                            Post.setNotHelpFull(obj.getInt("NotHelpFull"));
-                            Post.setUserId(obj.getString("UserId"));
-                            Post.setUserName(obj.getString("UserName"));
-                            Post.setCategory(obj.getString("Category"));
-                            Post.setSubject(obj.getString("Subject"));
-                            Post.setPostText(obj.getString("PostText"));
-                            Post.setTopComment(obj.getString("TopComment"));
-                            Post.setTopCommentUserName(obj.getString("TopCommentUserName"));
-                            Post.setTimeStamp(obj.getString("TimeStamp"));
+                                JSONObject obj = objPostArray.getJSONObject(i);
+                                Log.i("SplashScreenSubject", obj.getString("Subject"));
+                                Post.setPostId(obj.getInt("PostId"));
+                                Post.setHelpFull(obj.getInt("HelpFull"));
+                                Post.setNotHelpFull(obj.getInt("NotHelpFull"));
+                                Post.setUserId(obj.getString("UserId"));
+                                Post.setUserName(obj.getString("UserName"));
+                                Post.setCategory(obj.getString("Category"));
+                                Post.setSubject(obj.getString("Subject"));
+                                Post.setPostText(obj.getString("PostText"));
+                                Post.setTopComment(obj.getString("TopComment"));
+                                Post.setTopCommentUserName(obj.getString("TopCommentUserName"));
+                                Post.setTimeStamp(obj.getString("TimeStamp"));
 
-                            db.InsertPost(Post);
+                                db.InsertPost(Post);
 
-                            //End of getting question details
+                                //End of getting question details
+                            }
                         }
                     }
                 }

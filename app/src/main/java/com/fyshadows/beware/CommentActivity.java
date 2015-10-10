@@ -99,13 +99,11 @@ public class CommentActivity extends AppCompatActivity {
         TextView txtEmpty = (TextView) findViewById(R.id.txtEmpty);
         if (MasterDetails.isOnline(this)) {
             txtEmpty.setText("Loading Comments....");
-            new AsyncGetComments().execute();
+            new AsyncGetComments().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
         } else {
             txtEmpty.setVisibility(View.VISIBLE);
             txtEmpty.setText("No internet Connection.Please connect to internet");
         }
-
-
 
        /* handler.postDelayed(new Runnable() {
 
@@ -146,7 +144,7 @@ public class CommentActivity extends AppCompatActivity {
                 UserId = objUserDetails.get(0).getUserId();
                 UserName = objUserDetails.get(0).getUserName();
                 if (MasterDetails.isOnline(CommentActivity.this)) {
-                    new PostCommentTask().execute();
+                    new PostCommentTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
                 } else {
                     Toast.makeText(CommentActivity.this, "Please connect to internet..", Toast.LENGTH_SHORT).show();
                 }
@@ -175,6 +173,8 @@ public class CommentActivity extends AppCompatActivity {
         //noinspection SimplifiableIfStatement
         switch (item.getItemId()) {
             case android.R.id.home:
+             asyncGetLatestCount async=new asyncGetLatestCount();
+             async.cancel(true);
                 finish();
                 return true;
             default:
@@ -205,6 +205,7 @@ public class CommentActivity extends AppCompatActivity {
             } else {
                 adapter = new CommentsAdapter(CommentActivity.this, list);
                 listView.setAdapter(adapter);
+                listView.setSelection(adapter.getCount() - 1);
                 txtEmpty.setVisibility(View.INVISIBLE);
             }
 
@@ -257,6 +258,8 @@ public class CommentActivity extends AppCompatActivity {
                         }
 
 
+
+
                     }
                     return null;
                 } catch (JSONException e) {
@@ -272,11 +275,13 @@ public class CommentActivity extends AppCompatActivity {
             if (list != null) {
                 adapter = new CommentsAdapter(CommentActivity.this, list);
                 listView.setAdapter(adapter);
+                listView.setSelection(adapter.getCount() - 1);
                 txtEmpty.setVisibility(View.INVISIBLE);
             } else {
                 txtEmpty.setVisibility(View.VISIBLE);
                 txtEmpty.setText("Be the first to comment.");
             }
+            new asyncGetLatestCount().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
 
         }
     }
@@ -301,7 +306,6 @@ public class CommentActivity extends AppCompatActivity {
             Log.i("CommentActivityParam", "ParamAdded");
             json = jsonParser.makeHttpRequest(
                     MasterDetails.GetComments, "GET", params);
-            Log.i("CommentActivityLength", String.valueOf(json.length()));
             if (json != null) {
                 // json success tag
                 success = json.getInt("success");
@@ -331,6 +335,69 @@ public class CommentActivity extends AppCompatActivity {
             e.printStackTrace();
         }
         return null;
+    }
+
+
+    public class asyncGetLatestCount extends AsyncTask<String, Void, String> {
+        JSONParser jsonParser = new JSONParser();
+
+        public asyncGetLatestCount() {
+            super();
+        }
+
+        @Override
+        protected void onPreExecute() {
+
+        }
+
+        @Override
+        protected String doInBackground(String... urls) {
+            try {
+                Log.i("Comment async start", "got json");
+
+                        MasterDetails MasterDetails = new MasterDetails();
+                        BewareDatabase db = new BewareDatabase(CommentActivity.this);
+
+                        int success;
+                        List<NameValuePair> params = new ArrayList<NameValuePair>();
+
+                        params.clear();
+
+                        params.add(new BasicNameValuePair("PostId", String.valueOf(PostID)));
+
+                        JSONObject json = jsonParser.makeHttpRequest(MasterDetails.GetLatestCount, "GET", params);
+                        Log.i("Comment async  Post", "got json");
+                        Log.i("Comment async  post id", String.valueOf(PostID));
+                        if(json != null) {
+                            if (json.length() > 0) {
+                                // json success tag
+                                success = json.getInt("success");
+                                if (success == 1) {
+                                    Log.i("Comment async Lat Post", "got json sucesss");
+                                    JSONArray objPostArray = json.getJSONArray("LatestCount"); // JSON
+
+                                    Log.i("Comment async length", String.valueOf(objPostArray.length()));
+                                    if (objPostArray.length() > 0) {
+                                        // Array
+                                        JSONObject obj = objPostArray.getJSONObject(0);
+                                        db.UpdateLatestCount(Integer.parseInt(PostID), obj.getInt("HelpFull"), obj.getInt("NotHelpFull"), obj.getInt("CommentCount"));
+
+                                    }
+                                }
+                            }
+                        }
+
+            } catch (JSONException e) {
+                Log.i("Home", "Executing Async activity" + e);
+            }
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+
+        }
     }
 
 }
